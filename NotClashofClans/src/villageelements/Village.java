@@ -12,10 +12,27 @@ class ResourceStorage {
         capacity = new int[ResourceType.values().length];
     }
 
+    // method to add a specific quantity of a resource type to the player's storage
     public void add(ResourceType resourceType, int qty) {
+        int index = resourceType.getIndex();
+        resources[index] += qty;
+
+        // Ensure that the resource amount does not exceed the capacity
+        if (resources[index] > capacity[index]) {
+            resources[index] = capacity[index];
+        }
     }
 
+    // method to subtract a specific quantity of a resource type from the player's
+    // storage
     public void sub(ResourceType resourceType, int qty) {
+        int index = resourceType.getIndex();
+        resources[index] -= qty;
+
+        // Ensure that the resource amount does not go below zero
+        if (resources[index] < 0) {
+            resources[index] = 0;
+        }
     }
 
     public int getCapacity(ResourceType resourceType) {

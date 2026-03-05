@@ -133,6 +133,7 @@ public class GameEngine {
      * Updates the current time in the game
      */
     public void updateTime() {
+        currentTime = System.currentTimeMillis();
     }
 
     /**
@@ -174,7 +175,21 @@ public class GameEngine {
      *         building
      */
     public ActionTimer build(Building element, Village village) {
-        return new ActionTimer();
+
+        if (canBuild(element, village)) {
+
+            // subtract resources from village
+            Resources cost = element.getProductionCost();
+            for (ResourceType resourceType : ResourceType.values()) {
+                int currentAmount = village.getResourceAmount(resourceType);
+                int newAmount = currentAmount - cost.getAmount(resourceType);
+                village.getResourceStorage().setAmount(resourceType, newAmount);
+
+            }
+            return new ActionTimer();
+        } else {
+            return null;
+        }
     }
 
     /**
