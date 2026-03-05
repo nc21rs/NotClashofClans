@@ -59,7 +59,13 @@ public class Building implements Damageable, Upgradeable {
 
     @Override
     public void takeDamage(int damage) {
+        health -= damage;
 
+        // if health drops to 0, then building is destroyed
+        if (health <= 0) {
+            health = 0;
+            destroyed = true;
+        }
     }
 
     @Override
@@ -69,7 +75,7 @@ public class Building implements Damageable, Upgradeable {
 
     @Override
     public boolean isDestroyed() {
-        return false;
+        return destroyed;
     }
 
     @Override

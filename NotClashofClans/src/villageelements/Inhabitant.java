@@ -8,13 +8,13 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
     private int attackDamage;
     private int range;
     private int level;
-    private boolean isDestroyed;
+    private boolean destroyed;
     private Resources upgradeCost;
     private Resources productionCost;
     private int maxLevel;
 
     protected void setDestroyed(boolean destroyed) {
-        isDestroyed = destroyed;
+        this.destroyed = destroyed;
     }
 
     protected void setRange(int range) {
@@ -61,7 +61,13 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
 
     @Override
     public void takeDamage(int damage) {
+        health -= damage;
 
+        // if health drops to 0, then inhabitant is destroyed
+        if (health <= 0) {
+            health = 0;
+            destroyed = true;
+        }
     }
 
     @Override
@@ -71,7 +77,7 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
 
     @Override
     public boolean isDestroyed() {
-        return isDestroyed;
+        return destroyed;
     }
 
     @Override
