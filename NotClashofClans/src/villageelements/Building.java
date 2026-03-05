@@ -1,45 +1,60 @@
 package villageelements;
 
-public class Building implements Damageable, Upgradeable{
+public class Building implements Damageable, Upgradeable {
 
-    /**Attributes*/
+    /** Attributes */
     private int health;
     private int posX;
     private int posY;
     private int level;
     private boolean destroyed;
     private Resources productionCost;
+    private Resources upgradeCost;
+    private int maxLevel;
 
-    /**Methods*/
-    //SETTERS
+    /** Methods */
+    // SETTERS
     protected void setPosX(int posX) {
         this.posX = posX;
     }
+
     protected void setPosY(int posY) {
         this.posY = posY;
     }
+
     protected void setCost(Resources productionCost) {
         this.productionCost = productionCost;
     }
+
     protected void setLevel(int level) {
         this.level = level;
     }
+
     protected void setDestroyed(boolean destroyed) {
         this.destroyed = destroyed;
     }
+
     protected void setHealth(int health) {
         this.health = health;
     }
 
-    //GETTERS
+    // GETTERS
     public int getPosX() {
         return posX;
     }
+
     public int getPosY() {
         return posY;
     }
-    public Resources getCost() {
+
+    public Resources getProductionCost() {
         return productionCost;
+    }
+
+    // interface: Upgradable
+    // method to get the upgrade cost of a building
+    public Resources getUpgradeCost() {
+        return upgradeCost;
     }
 
     @Override
@@ -60,5 +75,11 @@ public class Building implements Damageable, Upgradeable{
     @Override
     public int getLevel() {
         return level;
+    }
+
+    @Override
+    // Interface: Upgradable
+    public int getMaxLevel() {
+        return maxLevel;
     }
 }
