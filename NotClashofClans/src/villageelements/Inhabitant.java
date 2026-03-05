@@ -97,4 +97,13 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
     public int getMaxLevel() {
         return maxLevel;
     }
+
+    @Override
+    public void upgrade() {
+        level++;
+
+        // increase stats of inhabitant when it is upgraded
+        health += 10;
+        attackDamage += 5;
+    }
 }

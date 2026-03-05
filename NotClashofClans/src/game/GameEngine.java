@@ -162,30 +162,29 @@ public class GameEngine {
      *         element
      */
     public ActionTimer update(Upgradeable element, Village village) {
-        return new ActionTimer();
+        if (canUpgrade(element, village)) {
+            village.spendResources(element.getUpgradeCost());
+            element.upgrade();
+            return new ActionTimer();
+        } else {
+            return null;
+        }
     }
 
     /**
      * Returns an ActionTimer object representing the time required to build a
      * building
      * 
-     * @param element the Building element
+     * @param element the Building
      * @param village the Village where the building is being constructed
      * @return an ActionTimer object representing the time required to build the
      *         building
      */
-    public ActionTimer build(Building element, Village village) {
+    public ActionTimer build(Building building, Village village) {
 
-        if (canBuild(element, village)) {
-
-            // subtract resources from village
-            Resources cost = element.getProductionCost();
-            for (ResourceType resourceType : ResourceType.values()) {
-                int currentAmount = village.getResourceAmount(resourceType);
-                int newAmount = currentAmount - cost.getAmount(resourceType);
-                village.getResourceStorage().setAmount(resourceType, newAmount);
-
-            }
+        if (canBuild(building, village)) {
+            village.spendResources(building.getProductionCost());
+            village.addBuilding(building);
             return new ActionTimer();
         } else {
             return null;
@@ -201,8 +200,14 @@ public class GameEngine {
      * @return an ActionTimer object representing the time required to train the
      *         inhabitant
      */
-    public ActionTimer train(Inhabitant element, Village village) {
-        return new ActionTimer();
+    public ActionTimer train(Inhabitant inhabitant, Village village) {
+        if (canTrain(inhabitant, village)) {
+            village.spendResources(inhabitant.getProductionCost());
+            village.addInhabitant(inhabitant);
+            return new ActionTimer();
+        } else {
+            return null;
+        }
     }
 
     /**
