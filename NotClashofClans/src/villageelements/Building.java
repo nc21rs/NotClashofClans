@@ -88,4 +88,12 @@ public class Building implements Damageable, Upgradeable {
     public int getMaxLevel() {
         return maxLevel;
     }
+
+    @Override
+    public void upgrade() {
+        level++;
+
+        // increase health of building when it is upgraded
+        health += 100;
+    }
 }

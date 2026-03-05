@@ -95,4 +95,22 @@ public class Village {
     public List<Building> getBuildings() {
         return buildings;
     }
+
+    // method to add a building to the village
+    public void addBuilding(Building building) {
+        buildings.add(building);
+    }
+
+    // method to add an inhabitant to the village
+    public void addInhabitant(Inhabitant inhabitant) {
+        inhabitants.add(inhabitant);
+    }
+
+    // method to spend resources from the village
+    public void spendResources(Resources cost) {
+        for (ResourceType type : ResourceType.values()) {
+            resourceStorage.sub(type, cost.getAmount(type));
+        }
+    }
+
 }
