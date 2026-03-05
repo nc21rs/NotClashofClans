@@ -2,12 +2,17 @@ package villageelements;
 
 public class Resources {
 
-    private int[] cost;
-    public Resources(){
-        cost = new int[ResourceType.values().length];
+    private int[] amounts;
+
+    public Resources() {
+        amounts = new int[ResourceType.values().length];
     }
 
-    protected void setCost(ResourceType resourceType, int quantity) {
-        cost[resourceType.getIndex()] = quantity;
+    protected void setAmount(ResourceType resourceType, int quantity) {
+        amounts[resourceType.getIndex()] = quantity;
+    }
+
+    public int getAmount(ResourceType resourceType) {
+        return amounts[resourceType.getIndex()];
     }
 }
