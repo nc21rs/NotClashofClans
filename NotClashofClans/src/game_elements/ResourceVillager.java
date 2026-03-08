@@ -3,12 +3,29 @@ package game_elements;
 public class ResourceVillager extends Inhabitant{
     /**Attributes*/
     private int productionCapacity;
+    private ResourceType resourceProduced;
+
     /**Attributes*/
     protected void setProductionCapacity(int productionCapacity) {
         this.productionCapacity = productionCapacity;
     }
+
+    protected void setResourceProduced(ResourceType resourceProduced) {
+        this.resourceProduced = resourceProduced;
+    }
+
     public int getProductionCapacity() {
         return productionCapacity;
+    }
+    
+    public ResourceType getResourceProduced() {
+        return resourceProduced;
+    }
+
+    public Resources produceResource(){
+        Resources produced = new Resources();
+        produced.setAmount(resourceProduced, productionCapacity);
+        return produced;
     }
 
     @Override

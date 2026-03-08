@@ -13,6 +13,12 @@ class ResourceStorage {
     public ResourceStorage() {
         resources = new int[ResourceType.values().length];
         capacity = new int[ResourceType.values().length];
+
+        // initialize all resources to 0 and capacity to 100 for now
+        for (int i = 0; i < resources.length; i++) {
+            resources[i] = 0;
+            capacity[i] = 100; 
+        }
     }
 
     // method to add a specific quantity of a resource type to the player's storage
@@ -212,5 +218,25 @@ public class Village {
 
     public int getMapSize() {
         return MAP_SIZE;
+    }
+
+    public void addResources(Resources toAdd) {
+        if (toAdd == null) {
+            return;
+        }
+
+        for (ResourceType type : ResourceType.values()) {
+            resourceStorage.add(type, toAdd.getAmount(type));
+        }
+    }
+
+    public void generateResources(){
+        for (Inhabitant inhabitant : inhabitants) {
+            if (inhabitant instanceof ResourceVillager) {
+                ResourceVillager villager = (ResourceVillager) inhabitant;
+                Resources produced = villager.produceResource();
+                addResources(produced);
+            }
+        }
     }
 }

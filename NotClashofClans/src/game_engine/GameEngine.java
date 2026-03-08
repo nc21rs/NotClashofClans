@@ -255,4 +255,12 @@ public class GameEngine {
     public Army generateIncomingArmy() {
         return new Army();
     }
+
+    public void villageCollectResources(Village village) {
+        if (village == null){
+            return;
+        }
+
+        village.generateResources();
+    }
 }
