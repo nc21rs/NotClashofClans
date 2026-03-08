@@ -1,15 +1,30 @@
 package game_engine;
 
 import game_elements.*;
+import game_user_interface.InvalidMenuChoiceException;
 import game_user_interface.UserInterface;
 
-/**
- * Author Notes: Norman
- *
- * We have 3 Packages: Game Engine, UI, Assets, +Players(JDBS)
- * > Running the game will create ONLY 1 of each instance
- * > Game Engine is the heart.
- */
+import java.util.ArrayList;
+
+class Task{
+    long start;
+    long duration;
+    boolean done;
+    Building target;
+    public Task(Building target, long durationSeconds){
+        this.target = target;
+        start = System.currentTimeMillis();
+        duration = durationSeconds * 1000;
+        done = false;
+    }
+
+    public boolean isDone(){
+        return System.currentTimeMillis() >= (start+duration);
+    }
+
+
+
+}
 
 public class GameEngine {
     private boolean running;
@@ -17,21 +32,81 @@ public class GameEngine {
     private final BattleComputer battleComputer = new BattleComputer();
     private final AttackExplorer attackExplorer = new AttackExplorer();
 
+    UserInterface userInterface;
+    Village village;
+    ArrayList<Task> upgradeTask;
     /**
      * Constructor. Initializes all required game processes (elements, engine,
      * user_interface, players)
      */
     public GameEngine() {
         running = true; // the game is running
-        UserInterface userInterface = new UserInterface(20, 20);
-        Village villageAssets = new Village();
-        // Indefinitely run game processes until user quits game
-        // while (running){
-        //
-        // break;
-        // }
+        userInterface = new UserInterface(20, 20);
+        village = new Village();
+        upgradeTask = new ArrayList<>();
+
+        start();
 
     }
+
+    public void start(){
+        while(running){
+            update();
+            userInterface.displayResources(village);
+            userInterface.displayOptions();
+
+            try{
+                ActionType actionType = userInterface.getUserAction();
+                action(actionType);
+            } catch (InvalidMenuChoiceException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void action(ActionType actionType){
+        switch(actionType){
+            case QUIT:
+                running=false;
+                break;
+            case UPGRADE_BUILD:
+                //get x and y coords
+                break;
+            case BUILD:
+                //pick building, then get x and y
+            case TRAIN:
+                //prompt user with options to train troops
+                break;
+            case ATTACK:
+                //prompt user to scout bases and perform attack
+                break;
+            default:
+                System.out.println("That is not an option");
+        }
+    }
+
+    public void update(){
+        currentTime = System.currentTimeMillis();
+        java.util.Iterator<Task> iterator = upgradeTask.iterator();
+        while(iterator.hasNext()){
+            Task task = iterator.next();
+
+            if(task.isDone()){
+                task.target.upgrade();
+                iterator.remove();
+            }
+        }
+    }
+    public void requestUpgrade(int x, int y){
+        Building building = village.mapBuild[x][y];
+        if (canUpgrade(building,village)){
+            village.spendResources(building.getUpgradeCost());
+
+            upgradeTask.add(new Task(building,60)); //Lets just assume all upgrades take 60seconds
+
+        }
+    }
+
 
     /**
      * Returns a boolean value indicating whether a player can attack a village
