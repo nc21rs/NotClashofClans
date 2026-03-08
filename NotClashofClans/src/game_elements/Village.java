@@ -17,7 +17,7 @@ class ResourceStorage {
         // initialize all resources to 0 and capacity to 100 for now
         for (int i = 0; i < resources.length; i++) {
             resources[i] = 0;
-            capacity[i] = 100; 
+            capacity[i] = 100;
         }
     }
 
@@ -48,7 +48,7 @@ class ResourceStorage {
         return capacity[resourceType.getIndex()];
     }
 
-    /*
+    /**
      * Returns the amount of a specific resource type that the player has
      * 
      * @param resourceType the type of resource to check
@@ -116,6 +116,10 @@ public class Village {
         }
 
         this.resourceStorage = resourceStorage;
+    }
+
+    public void setGuardTime(long guardTime) {
+        this.guardTime = guardTime;
     }
 
     public long getGuardTime() {
@@ -230,7 +234,7 @@ public class Village {
         }
     }
 
-    public void generateResources(){
+    public void generateResources() {
         for (Inhabitant inhabitant : inhabitants) {
             if (inhabitant instanceof ResourceVillager) {
                 ResourceVillager villager = (ResourceVillager) inhabitant;

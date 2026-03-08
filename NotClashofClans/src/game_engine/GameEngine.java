@@ -253,16 +253,24 @@ public class GameEngine {
     /**
      * Returns a ComputedBattle object representing the result of an attack
      * 
-     * @param attacker the Army that is attacking
+     * @param attacker the Village that has the army attacking
      * @param defender the Village that is being attacked
      * @return a ComputedBattle object representing the result of the attack
      */
-    public ComputedBattle attack(Army attacker, Village defender) {
-        // check if attack is possible
-        if (canAttack(attacker, defender)) { // attack possible
-            return battleComputer.computedBattle(attacker, defender);
-        } else { // attack not possible
-            return null;
+    public ComputedBattle attack(Village attacker, Village defender) {
+
+        ComputedBattle battleResult = battleComputer.computedBattle(attacker, defender);
+
+        if(battleResult.didWin()) {
+            // Attacker won: add loot to attacker, remove from defender, and set guard time for defender
+            defender.spendResources(battleResult.getLoot());
+            defender.setGuardTime(currentTime + 3600000); 
+            attacker.addResources(battleResult.getLoot());
+            return battleResult;
+        } else {
+            // Attacker lost: set guard time for attacker
+            attacker.setGuardTime(currentTime + 3600000); 
+            return battleResult;
         }
     }
 
