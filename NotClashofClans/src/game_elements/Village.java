@@ -103,6 +103,10 @@ public class Village {
 
     // method to set the resource storage of the village
     protected void setResourceStorage(ResourceStorage resourceStorage) {
+        if (resourceStorage == null) {
+            throw new IllegalArgumentException("Resource storage cannot be null.");
+        }
+        
         this.resourceStorage = resourceStorage;
     }
 
@@ -137,16 +141,28 @@ public class Village {
 
     // method to add a building to the village
     public void addBuilding(Building building) {
+        if (building == null) {
+            throw new IllegalArgumentException("Building cannot be null.");
+        }
+        
         buildings.add(building);
     }
 
     // method to add an inhabitant to the village
     public void addInhabitant(Inhabitant inhabitant) {
+        if (inhabitant == null) {
+            throw new IllegalArgumentException("Inhabitant cannot be null.");
+        }
+
         inhabitants.add(inhabitant);
     }
 
     // method to spend resources from the village
     public void spendResources(Resources cost) {
+        if (cost == null) {
+            throw new IllegalArgumentException("Cost cannot be null.");
+        }
+
         for (ResourceType type : ResourceType.values()) {
             resourceStorage.sub(type, cost.getAmount(type));
         }
