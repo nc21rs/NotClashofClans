@@ -2,6 +2,7 @@ package game_elements;
 
 import game_player_database.PlayerDataBase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,54 +53,53 @@ class ResourceStorage {
         return resources[resourceType.getIndex()];
     }
 
-
-    private void setCapacity(){}
+    private void setCapacity() {
+    }
 
 }
 
-
-
 public class Village {
-    //Map variables
-    final static int MAP_SIZE = 11; //keep it small for now
+    // Map variables
+    final static int MAP_SIZE = 11; // keep it small for now
 
-    //attacking function are to cross-reference between maps.
+    // attacking function are to cross-reference between maps.
     public Building[][] mapBuild;
-    public Inhabitant[][] mapHabit; //both attacking troops and defending inhabitants share this plane
-
+    public Inhabitant[][] mapHabit; // both attacking troops and defending inhabitants share this plane
 
     private PlayerDataBase player;
     private ResourceStorage resourceStorage;
     private int populationSize;
     private int populationMax;
     private long guardTime;
-    List<Building> buildings;       //
-    List<Inhabitant> inhabitants;
-    Army army;
-    VillageHall villageHall;
+    private List<Building> buildings;
+    private List<Inhabitant> inhabitants;
+    private Army army;
+    private VillageHall villageHall;
 
-
-    public Village(){
-        //Initialize all variables
-
-        //Map
+    public Village() {
+        // Map
         mapBuild = new Building[MAP_SIZE][MAP_SIZE];
         mapHabit = new Inhabitant[MAP_SIZE][MAP_SIZE];
 
-
+        // initialize variables
+        resourceStorage = new ResourceStorage();
+        populationSize = 0;
+        populationMax = 0;
+        guardTime = 0;
+        buildings = new ArrayList<>();
+        inhabitants = new ArrayList<>();
+        army = new Army();
+        villageHall = new VillageHall(); // no argument constructor
 
         /**
          * Load Player Data
-         * > To store data on what buildings the player built, we simply draw from a list of buildings and inhabitants.
-         * > Buildings and Inhabitants -> serializable, and written as a file onto user's pc
+         * > To store data on what buildings the player built, we simply draw from a
+         * list of buildings and inhabitants.
+         * > Buildings and Inhabitants -> serializable, and written as a file onto
+         * user's pc
          */
 
-
-
     }
-
-
-
 
     // method to set the resource storage of the village
     protected void setResourceStorage(ResourceStorage resourceStorage) {
@@ -151,5 +151,10 @@ public class Village {
             resourceStorage.sub(type, cost.getAmount(type));
         }
     }
+
+    public ResourceStorage getResources() {
+        return resourceStorage; 
+    }
+
 
 }

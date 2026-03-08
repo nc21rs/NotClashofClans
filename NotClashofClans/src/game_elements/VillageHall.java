@@ -7,7 +7,7 @@ public class VillageHall extends Building {
      */
     public VillageHall(){
         setHealth(200);
-        setName("Lumber Mill");
+        setName("Village Hall");
         setLevel(1);
         setMaxLevel(10);
         setDestroyed(false);
