@@ -83,15 +83,15 @@ public class Village {
 
         // initialize variables
         resourceStorage = new ResourceStorage();
-        populationSize = 0;
-        populationMax = 0;
+        populationSize = 2;
+        populationMax = 100;
         guardTime = 0;
         buildings = new ArrayList<>();
         inhabitants = new ArrayList<>();
         army = new Army();
         villageHall = new VillageHall();
 
-        buildings.add(villageHall);
+        addBuilding(villageHall);
 
         /**
          * Load Player Data
@@ -156,6 +156,14 @@ public class Village {
         }
 
         buildings.add(building);
+
+        // update map with new building
+        int x = building.getPosX();
+        int y = building.getPosY();
+
+        if (x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE) {
+            mapBuild[x][y] = building;
+        }
     }
 
     // method to add an inhabitant to the village
@@ -183,4 +191,26 @@ public class Village {
         return resourceStorage;
     }
 
+    /**
+     * Checks if the village has sufficient resources for a cost.
+     *
+     * @param cost the Resources object representing the cost
+     * @return true if the village has enough resources, false otherwise
+     */
+    public boolean hasSufficientResources(Resources cost) {
+        if (cost == null) {
+            return false;
+        }
+
+        for (ResourceType type : ResourceType.values()) {
+            if (resourceStorage.getResource(type) < cost.getAmount(type)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int getMapSize() {
+        return MAP_SIZE;
+    }
 }
