@@ -12,6 +12,7 @@ public class Miner extends ResourceVillager {
         setLevel(1);
         setDestroyed(false);
         setProductionCapacity(20);
+        setResourceProduced(ResourceType.IRON);
         setMaxLevel(10);
 
         Resources productionCost = new Resources();

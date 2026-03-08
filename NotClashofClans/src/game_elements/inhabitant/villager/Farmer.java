@@ -2,16 +2,17 @@ package game_elements.inhabitant.villager;
 
 import game_elements.ResourceType;
 import game_elements.Resources;
-import game_elements.Worker;
+import game_elements.ResourceVillager;
 
-public class Farmer extends Worker {
-    public Farmer(){
+public class Farmer extends ResourceVillager {
+    public Farmer() {
         setHealth(70);
         setAttackDamage(5);
         setRange(1);
         setLevel(1);
         setDestroyed(false);
-        setIdle(true);
+        setProductionCapacity(10);
+        setResourceProduced(ResourceType.FOOD);
         setMaxLevel(10);
 
         Resources productionCost = new Resources();
