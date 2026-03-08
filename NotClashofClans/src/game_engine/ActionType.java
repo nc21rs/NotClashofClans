@@ -1,5 +1,5 @@
 package game_engine;
 
 public enum ActionType {
-    BUILD,PRODUCE,UPGRADE,EXPLORE,ATTACK;
+    BUILD, TRAIN, PRODUCE, UPGRADE_TROOP, UPGRADE_BUILD, EXPLORE, ATTACK, QUIT;
 }
