@@ -1,9 +1,28 @@
 package game_elements.inhabitant.villager;
 
+import game_elements.ResourceType;
 import game_elements.ResourceVillager;
+import game_elements.Resources;
 
 public class Collector extends ResourceVillager {
     public Collector(){
-        //assign collector values
+        setHealth(70);
+        setAttackDamage(5);
+        setRange(1);
+        setLevel(1);
+        setDestroyed(false);
+        setProductionCapacity(20);
+        setResourceProduced(ResourceType.WOOD);
+        setMaxLevel(10);
+
+        Resources productionCost = new Resources();
+        productionCost.setAmount(ResourceType.FOOD, 15);
+        productionCost.setAmount(ResourceType.WOOD, 10);
+        setProductionCost(productionCost);
+
+        Resources upgradeCost = new Resources();
+        upgradeCost.setAmount(ResourceType.FOOD, 5);
+        upgradeCost.setAmount(ResourceType.WOOD, 5);
+        setUpgradeCost(upgradeCost);
     }
 }

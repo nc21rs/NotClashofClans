@@ -14,7 +14,7 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
     private Resources productionCost;
     private int maxLevel;
 
-    protected void setOnField(boolean onField){
+    protected void setOnField(boolean onField) {
         this.onField = onField;
     }
 
@@ -46,6 +46,18 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
         this.attackDamage = attackDamage;
     }
 
+    protected void setUpgradeCost(Resources upgradeCost) {
+        this.upgradeCost = upgradeCost;
+    }
+
+    protected void setProductionCost(Resources productionCost) {
+        this.productionCost = productionCost;
+    }
+
+    protected void setMaxLevel(int maxLevel) {
+        this.maxLevel = maxLevel;
+    }
+
     public int getPosY() {
         return posY;
     }
@@ -75,7 +87,9 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
         }
     }
 
-    public boolean getOnField(){return onField;}
+    public boolean getOnField() {
+        return onField;
+    }
 
     @Override
     public int getHealth() {

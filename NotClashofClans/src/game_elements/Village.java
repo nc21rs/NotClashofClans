@@ -13,6 +13,12 @@ class ResourceStorage {
     public ResourceStorage() {
         resources = new int[ResourceType.values().length];
         capacity = new int[ResourceType.values().length];
+
+        // initialize all resources to 0 and capacity to 100 for now
+        for (int i = 0; i < resources.length; i++) {
+            resources[i] = 0;
+            capacity[i] = 100; 
+        }
     }
 
     // method to add a specific quantity of a resource type to the player's storage
@@ -83,13 +89,15 @@ public class Village {
 
         // initialize variables
         resourceStorage = new ResourceStorage();
-        populationSize = 0;
-        populationMax = 0;
+        populationSize = 2;
+        populationMax = 100;
         guardTime = 0;
         buildings = new ArrayList<>();
         inhabitants = new ArrayList<>();
         army = new Army();
-        villageHall = new VillageHall(); // no argument constructor
+        villageHall = new VillageHall();
+
+        addBuilding(villageHall);
 
         /**
          * Load Player Data
@@ -103,6 +111,10 @@ public class Village {
 
     // method to set the resource storage of the village
     protected void setResourceStorage(ResourceStorage resourceStorage) {
+        if (resourceStorage == null) {
+            return;
+        }
+
         this.resourceStorage = resourceStorage;
     }
 
@@ -131,30 +143,100 @@ public class Village {
         return villageHall.getLevel();
     }
 
+    public VillageHall getVillageHall() {
+        return villageHall;
+    }
+
     public List<Building> getBuildings() {
-        return buildings;
+        return new ArrayList<>(buildings); // copy to prevent external modification
+    }
+
+    public List<Inhabitant> getInhabitants() {
+        return new ArrayList<>(inhabitants); // copy to prevent external modification
     }
 
     // method to add a building to the village
     public void addBuilding(Building building) {
+        if (building == null) {
+            return;
+        }
+
         buildings.add(building);
+
+        // update map with new building
+        int x = building.getPosX();
+        int y = building.getPosY();
+
+        if (x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE) {
+            mapBuild[x][y] = building;
+        }
     }
 
     // method to add an inhabitant to the village
     public void addInhabitant(Inhabitant inhabitant) {
+        if (inhabitant == null) {
+            return;
+        }
+
         inhabitants.add(inhabitant);
+        populationSize++;
     }
 
     // method to spend resources from the village
     public void spendResources(Resources cost) {
+        if (cost == null) {
+            return;
+        }
+
         for (ResourceType type : ResourceType.values()) {
             resourceStorage.sub(type, cost.getAmount(type));
         }
     }
 
     public ResourceStorage getResources() {
-        return resourceStorage; 
+        return resourceStorage;
     }
 
+    /**
+     * Checks if the village has sufficient resources for a cost.
+     *
+     * @param cost the Resources object representing the cost
+     * @return true if the village has enough resources, false otherwise
+     */
+    public boolean hasSufficientResources(Resources cost) {
+        if (cost == null) {
+            return false;
+        }
 
+        for (ResourceType type : ResourceType.values()) {
+            if (resourceStorage.getResource(type) < cost.getAmount(type)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int getMapSize() {
+        return MAP_SIZE;
+    }
+
+    public void addResources(Resources toAdd) {
+        if (toAdd == null) {
+            return;
+        }
+
+        for (ResourceType type : ResourceType.values()) {
+            resourceStorage.add(type, toAdd.getAmount(type));
+        }
+    }
+
+    public void generateResources(){
+        for (Inhabitant inhabitant : inhabitants) {
+            if (inhabitant instanceof ResourceVillager) {
+                ResourceVillager villager = (ResourceVillager) inhabitant;
+                Resources produced = villager.produceResource();
+                addResources(produced);
+            }
+        }
+    }
 }

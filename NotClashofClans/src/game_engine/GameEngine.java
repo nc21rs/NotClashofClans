@@ -29,29 +29,40 @@ class Task{
 public class GameEngine {
     private boolean running;
     private long currentTime;
-    private final BattleComputer battleComputer = new BattleComputer();
-    private final AttackExplorer attackExplorer = new AttackExplorer();
-
+    private final BattleComputer;
+    private final AttackExplorer;
+    private UserInterface userInterface;
+    private Village playerVillage;
+  
     UserInterface userInterface;
     Village village;
     ArrayList<Task> upgradeTask;
+    
+    
     /**
-     * Constructor. Initializes all required game processes (elements, engine,
-     * user_interface, players)
+     * Constructor. Initializes all required game parameters/processes 
+     * user_interface, players
      */
     public GameEngine() {
+        // initialize important game engine variables
         running = true; // the game is running
+        currentTime = System.currentTimeMillis(); 
         userInterface = new UserInterface(20, 20);
         village = new Village();
         upgradeTask = new ArrayList<>();
-
+        battleComputer = new BattleComputer();
+        attackExplorer = new AttackExplorer();
+        
+      
+        //run game
         start();
-
     }
 
+    //method handles running the game
     public void start(){
+        //loop until user decides to quit
         while(running){
-            update();
+            update(); //check any running tasks.
             userInterface.displayResources(village);
             userInterface.displayOptions();
 
@@ -87,24 +98,25 @@ public class GameEngine {
 
     public void update(){
         currentTime = System.currentTimeMillis();
-        java.util.Iterator<Task> iterator = upgradeTask.iterator();
-        while(iterator.hasNext()){
+        java.util.Iterator<Task> iterator = upgradeTask.iterator(); //analyize list of running upgrades.
+        while(iterator.hasNext()){  //for each task.
             Task task = iterator.next();
 
-            if(task.isDone()){
-                task.target.upgrade();
-                iterator.remove();
+            if(task.isDone()){  //check if upgrade task done
+                task.target.upgrade();  //apply game upgrade.
+                iterator.remove();  //remove task from list. Via iterator. (By-passes problem of for-each removing live item from list)
             }
         }
     }
+  //user wants to upgrade selected grid.
     public void requestUpgrade(int x, int y){
         Building building = village.mapBuild[x][y];
-        if (canUpgrade(building,village)){
+        if (canUpgrade(building,village)){  //is it upgrade-able?
             village.spendResources(building.getUpgradeCost());
-
             upgradeTask.add(new Task(building,60)); //Lets just assume all upgrades take 60seconds
 
         }
+      //otherwise, its not.
     }
 
 
@@ -156,11 +168,11 @@ public class GameEngine {
 
         // get cost to upgrade element and check if player has enough resources
         Resources cost = element.getUpgradeCost();
-        for (ResourceType resourceType : ResourceType.values()) {
-            if (village.getResourceAmount(resourceType) < cost.getAmount(resourceType)) {
-                return false;
-            }
+        
+        if (!village.hasSufficientResources(cost)){
+            return false;
         }
+
 
         return true;
     }
@@ -180,14 +192,15 @@ public class GameEngine {
 
         // get cost to build building and check if player has enough resources
         Resources cost = building.getProductionCost();
-        for (ResourceType resourceType : ResourceType.values()) {
-            if (village.getResourceAmount(resourceType) < cost.getAmount(resourceType)) {
-                return false;
-            }
+        if (!village.hasSufficientResources(cost)){
+            return false;
         }
 
-        // check if building coordinates are valid
+        // check if building coordinates are valid (positive and within map boundaries)
         if (building.getPosX() < 0 || building.getPosY() < 0) {
+            return false;
+        }
+        if (building.getPosX() >= village.getMapSize() || building.getPosY() >= village.getMapSize()) {
             return false;
         }
 
@@ -216,11 +229,11 @@ public class GameEngine {
 
         // check if village has enough resources to train inhabitant
         Resources cost = inhabitant.getProductionCost();
-        for (ResourceType resourceType : ResourceType.values()) {
-            if (village.getResourceAmount(resourceType) < cost.getAmount(resourceType)) {
-                return false;
-            }
+        
+        if (!village.hasSufficientResources(cost)){
+            return false;
         }
+
 
         // check if village has enough population capacity to train inhabitant
         if (village.getPopulation() >= village.getPopulationMax()) {
@@ -262,7 +275,7 @@ public class GameEngine {
      * @return an ActionTimer object representing the time required to upgrade the
      *         element
      */
-    public ActionTimer update(Upgradeable element, Village village) {
+    public ActionTimer upgrade(Upgradeable element, Village village) {
         if (canUpgrade(element, village)) {
             village.spendResources(element.getUpgradeCost());
             element.upgrade();
@@ -328,5 +341,13 @@ public class GameEngine {
      */
     public Army generateIncomingArmy() {
         return new Army();
+    }
+
+    public void villageCollectResources(Village village) {
+        if (village == null){
+            return;
+        }
+
+        village.generateResources();
     }
 }

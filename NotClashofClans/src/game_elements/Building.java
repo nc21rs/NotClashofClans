@@ -89,15 +89,18 @@ public class Building implements Damageable, Upgradeable {
     }
 
     @Override
-    // Interface: Upgradable
     public int getMaxLevel() {
         return maxLevel;
     }
 
     @Override
     public void upgrade() {
+        if (level >= maxLevel) {
+            return; 
+        }
+        
+        // Upgrade if not at max level
         level++;
-        // increase health of building when it is upgraded
         health += 100;
     }
 
