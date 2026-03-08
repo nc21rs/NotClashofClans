@@ -1,23 +1,43 @@
 package game_engine;
 
 import game_elements.*;
+import game_user_interface.InvalidMenuChoiceException;
 import game_user_interface.UserInterface;
 
-/**
- * Author Notes: Norman
- *
- * We have 3 Packages: Game Engine, UI, Assets, +Players(JDBS)
- * > Running the game will create ONLY 1 of each instance
- * > Game Engine is the heart.
- */
+import java.util.ArrayList;
+
+class Task{
+    long start;
+    long duration;
+    boolean done;
+    Building target;
+    public Task(Building target, long durationSeconds){
+        this.target = target;
+        start = System.currentTimeMillis();
+        duration = durationSeconds * 1000;
+        done = false;
+    }
+
+    public boolean isDone(){
+        return System.currentTimeMillis() >= (start+duration);
+    }
+
+
+
+}
 
 public class GameEngine {
     private boolean running;
     private long currentTime;
+    private final BattleComputer;
+    private final AttackExplorer;
     private UserInterface userInterface;
     private Village playerVillage;
-    private BattleComputer battleComputer;
-    private AttackExplorer attackExplorer;
+  
+    UserInterface userInterface;
+    Village village;
+    ArrayList<Task> upgradeTask;
+    
     
     /**
      * Constructor. Initializes all required game parameters/processes 
@@ -25,13 +45,80 @@ public class GameEngine {
      */
     public GameEngine() {
         // initialize important game engine variables
-        running = true; 
+        running = true; // the game is running
         currentTime = System.currentTimeMillis(); 
-        userInterface = new UserInterface(20,20); 
-        playerVillage = new Village(); 
+        userInterface = new UserInterface(20, 20);
+        village = new Village();
+        upgradeTask = new ArrayList<>();
         battleComputer = new BattleComputer();
         attackExplorer = new AttackExplorer();
+        
+      
+        //run game
+        start();
     }
+
+    //method handles running the game
+    public void start(){
+        //loop until user decides to quit
+        while(running){
+            update(); //check any running tasks.
+            userInterface.displayResources(village);
+            userInterface.displayOptions();
+
+            try{
+                ActionType actionType = userInterface.getUserAction();
+                action(actionType);
+            } catch (InvalidMenuChoiceException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void action(ActionType actionType){
+        switch(actionType){
+            case QUIT:
+                running=false;
+                break;
+            case UPGRADE_BUILD:
+                //get x and y coords
+                break;
+            case BUILD:
+                //pick building, then get x and y
+            case TRAIN:
+                //prompt user with options to train troops
+                break;
+            case ATTACK:
+                //prompt user to scout bases and perform attack
+                break;
+            default:
+                System.out.println("That is not an option");
+        }
+    }
+
+    public void update(){
+        currentTime = System.currentTimeMillis();
+        java.util.Iterator<Task> iterator = upgradeTask.iterator(); //analyize list of running upgrades.
+        while(iterator.hasNext()){  //for each task.
+            Task task = iterator.next();
+
+            if(task.isDone()){  //check if upgrade task done
+                task.target.upgrade();  //apply game upgrade.
+                iterator.remove();  //remove task from list. Via iterator. (By-passes problem of for-each removing live item from list)
+            }
+        }
+    }
+  //user wants to upgrade selected grid.
+    public void requestUpgrade(int x, int y){
+        Building building = village.mapBuild[x][y];
+        if (canUpgrade(building,village)){  //is it upgrade-able?
+            village.spendResources(building.getUpgradeCost());
+            upgradeTask.add(new Task(building,60)); //Lets just assume all upgrades take 60seconds
+
+        }
+      //otherwise, its not.
+    }
+
 
     /**
      * Returns a boolean value indicating whether a player can attack a village
