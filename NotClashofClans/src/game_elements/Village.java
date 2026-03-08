@@ -89,7 +89,9 @@ public class Village {
         buildings = new ArrayList<>();
         inhabitants = new ArrayList<>();
         army = new Army();
-        villageHall = new VillageHall(); // no argument constructor
+        villageHall = new VillageHall();
+
+        buildings.add(villageHall);
 
         /**
          * Load Player Data
@@ -104,9 +106,9 @@ public class Village {
     // method to set the resource storage of the village
     protected void setResourceStorage(ResourceStorage resourceStorage) {
         if (resourceStorage == null) {
-            throw new IllegalArgumentException("Resource storage cannot be null.");
+            return;
         }
-        
+
         this.resourceStorage = resourceStorage;
     }
 
@@ -136,31 +138,36 @@ public class Village {
     }
 
     public List<Building> getBuildings() {
-        return buildings;
+        return new ArrayList<>(buildings); // copy to prevent external modification
+    }
+
+    public List<Inhabitant> getInhabitants() {
+        return new ArrayList<>(inhabitants); // copy to prevent external modification
     }
 
     // method to add a building to the village
     public void addBuilding(Building building) {
         if (building == null) {
-            throw new IllegalArgumentException("Building cannot be null.");
+            return;
         }
-        
+
         buildings.add(building);
     }
 
     // method to add an inhabitant to the village
     public void addInhabitant(Inhabitant inhabitant) {
         if (inhabitant == null) {
-            throw new IllegalArgumentException("Inhabitant cannot be null.");
+            return;
         }
 
         inhabitants.add(inhabitant);
+        populationSize++;
     }
 
     // method to spend resources from the village
     public void spendResources(Resources cost) {
         if (cost == null) {
-            throw new IllegalArgumentException("Cost cannot be null.");
+            return;
         }
 
         for (ResourceType type : ResourceType.values()) {
@@ -169,8 +176,7 @@ public class Village {
     }
 
     public ResourceStorage getResources() {
-        return resourceStorage; 
+        return resourceStorage;
     }
-
 
 }
