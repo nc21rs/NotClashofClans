@@ -14,23 +14,23 @@ import game_user_interface.UserInterface;
 public class GameEngine {
     private boolean running;
     private long currentTime;
-    private final BattleComputer battleComputer = new BattleComputer();
-    private final AttackExplorer attackExplorer = new AttackExplorer();
-
+    private UserInterface userInterface;
+    private Village playerVillage;
+    private BattleComputer battleComputer;
+    private AttackExplorer attackExplorer;
+    
     /**
-     * Constructor. Initializes all required game processes (elements, engine,
-     * user_interface, players)
+     * Constructor. Initializes all required game parameters/processes 
+     * user_interface, players
      */
     public GameEngine() {
-        running = true; // the game is running
-        UserInterface userInterface = new UserInterface(20, 20);
-        Village villageAssets = new Village();
-        // Indefinitely run game processes until user quits game
-        // while (running){
-        //
-        // break;
-        // }
-
+        // initialize important game engine variables
+        running = true; 
+        currentTime = System.currentTimeMillis(); 
+        userInterface = new UserInterface(20,20); 
+        playerVillage = new Village(); 
+        battleComputer = new BattleComputer();
+        attackExplorer = new AttackExplorer();
     }
 
     /**
@@ -81,11 +81,11 @@ public class GameEngine {
 
         // get cost to upgrade element and check if player has enough resources
         Resources cost = element.getUpgradeCost();
-        for (ResourceType resourceType : ResourceType.values()) {
-            if (village.getResourceAmount(resourceType) < cost.getAmount(resourceType)) {
-                return false;
-            }
+        
+        if (!village.hasSufficientResources(cost)){
+            return false;
         }
+
 
         return true;
     }
@@ -105,14 +105,15 @@ public class GameEngine {
 
         // get cost to build building and check if player has enough resources
         Resources cost = building.getProductionCost();
-        for (ResourceType resourceType : ResourceType.values()) {
-            if (village.getResourceAmount(resourceType) < cost.getAmount(resourceType)) {
-                return false;
-            }
+        if (!village.hasSufficientResources(cost)){
+            return false;
         }
 
-        // check if building coordinates are valid
+        // check if building coordinates are valid (positive and within map boundaries)
         if (building.getPosX() < 0 || building.getPosY() < 0) {
+            return false;
+        }
+        if (building.getPosX() >= village.getMapSize() || building.getPosY() >= village.getMapSize()) {
             return false;
         }
 
@@ -141,11 +142,11 @@ public class GameEngine {
 
         // check if village has enough resources to train inhabitant
         Resources cost = inhabitant.getProductionCost();
-        for (ResourceType resourceType : ResourceType.values()) {
-            if (village.getResourceAmount(resourceType) < cost.getAmount(resourceType)) {
-                return false;
-            }
+        
+        if (!village.hasSufficientResources(cost)){
+            return false;
         }
+
 
         // check if village has enough population capacity to train inhabitant
         if (village.getPopulation() >= village.getPopulationMax()) {
@@ -187,7 +188,7 @@ public class GameEngine {
      * @return an ActionTimer object representing the time required to upgrade the
      *         element
      */
-    public ActionTimer update(Upgradeable element, Village village) {
+    public ActionTimer upgrade(Upgradeable element, Village village) {
         if (canUpgrade(element, village)) {
             village.spendResources(element.getUpgradeCost());
             element.upgrade();
