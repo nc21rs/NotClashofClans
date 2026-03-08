@@ -3,7 +3,6 @@ package game_engine;
 import game_elements.*;
 import game_user_interface.UserInterface;
 
-
 /**
  * Author Notes: Norman
  *
@@ -19,27 +18,20 @@ public class GameEngine {
     private final AttackExplorer attackExplorer = new AttackExplorer();
 
     /**
-     * Constructor. Initializes all required game processes (elements, engine, user_interface, players)
+     * Constructor. Initializes all required game processes (elements, engine,
+     * user_interface, players)
      */
-    public GameEngine(){
-        running = true; //the game is running
-        UserInterface userInterface = new UserInterface();
+    public GameEngine() {
+        running = true; // the game is running
+        UserInterface userInterface = new UserInterface(20, 20);
         Village villageAssets = new Village();
-        //Indefinitely run game processes until user quits game
-//        while (running){
-//
-//            break;
-//        }
-
+        // Indefinitely run game processes until user quits game
+        // while (running){
+        //
+        // break;
+        // }
 
     }
-
-
-
-
-
-
-
 
     /**
      * Returns a boolean value indicating whether a player can attack a village
