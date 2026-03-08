@@ -137,6 +137,10 @@ public class Village {
         return villageHall.getLevel();
     }
 
+    public VillageHall getVillageHall() {
+        return villageHall;
+    }
+
     public List<Building> getBuildings() {
         return new ArrayList<>(buildings); // copy to prevent external modification
     }
