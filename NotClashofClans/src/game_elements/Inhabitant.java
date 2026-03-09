@@ -1,5 +1,9 @@
 package game_elements;
 
+/**
+ * This class represents an inhabitant in the game. It implements the
+ * Damageable, Upgradeable, and CanAttack interfaces.
+ */
 public class Inhabitant implements Damageable, Upgradeable, CanAttack {
     /** Attributes */
     private int health;

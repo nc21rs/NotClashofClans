@@ -1,5 +1,10 @@
 package game_elements;
 
+
+/**
+ * This class represents a defensive building in the game. It extends the
+ * Building class and implements the CanAttack interface.
+ */
 public class DefenceBuilding extends Building implements CanAttack{
     private int damage;
     private int range;

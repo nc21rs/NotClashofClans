@@ -7,7 +7,11 @@ import game_elements.ResourceType;
 import game_elements.Resources;
 import java.util.Random;
 
-class VillageGenerator{
+/**
+ * This class is responsible for generating random villages for the player to
+ * attack.
+ */
+class VillageGenerator {
     protected Random random;
 
     public VillageGenerator() {
@@ -17,7 +21,7 @@ class VillageGenerator{
     /**
      * Generates a random village with random resources, buildings, and inhabitants.
      * 
-     * @return a randomly generated Village 
+     * @return a randomly generated Village
      */
     public Village generateVillage() {
         Village generatedVillage = new Village();
@@ -32,7 +36,7 @@ class VillageGenerator{
 
         // Generate buildings for generated village
         for (int i = 0; i < 1 + random.nextInt(4); i++) {
-            
+
             int defenceChoice = random.nextInt(2);
 
             // Generate random building
@@ -40,12 +44,12 @@ class VillageGenerator{
                 generatedVillage.addBuilding(new Cannon());
             } else if (defenceChoice == 1) {
                 generatedVillage.addBuilding(new ArcherTowers());
-            } 
+            }
         }
-    
+
         // generate inhabitants for generated village
         for (int i = 0; i < 1 + random.nextInt(4); i++) {
-            int villagerChoice =  random.nextInt(4);
+            int villagerChoice = random.nextInt(4);
 
             if (villagerChoice == 0) {
                 generatedVillage.addInhabitant(new Builder());
@@ -63,11 +67,12 @@ class VillageGenerator{
 }
 
 /**
- * This class is responsible for generating random villages for the player to attack.
+ * This class is responsible for generating random villages for the player to
+ * attack.
  * It uses the VillageGenerator for abstraction on village generation process.
  */
-public class AttackExplorer extends VillageGenerator{
-    private Village candidate; 
+public class AttackExplorer extends VillageGenerator {
+    private Village candidate;
 
     public AttackExplorer() {
         this.candidate = generateVillage();
@@ -78,7 +83,7 @@ public class AttackExplorer extends VillageGenerator{
      * 
      * @return the current candidate village
      */
-    public Village showCandidate(){
+    public Village showCandidate() {
         return candidate;
     }
 
@@ -87,7 +92,7 @@ public class AttackExplorer extends VillageGenerator{
      * 
      * @return the new candidate village
      */
-    public Village reRollCandidate(){
+    public Village reRollCandidate() {
         this.candidate = generateVillage();
         return candidate;
     }

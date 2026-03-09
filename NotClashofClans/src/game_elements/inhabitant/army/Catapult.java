@@ -4,6 +4,10 @@ import game_elements.ArmyUnit;
 import game_elements.ResourceType;
 import game_elements.Resources;
 
+/**
+ * This class represents the Catapult unit in the game. It extends the ArmyUnit
+ * class.
+ */
 public class Catapult extends ArmyUnit {
     public Catapult() {
         setHealth(100);

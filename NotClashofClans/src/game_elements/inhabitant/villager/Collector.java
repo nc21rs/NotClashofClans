@@ -4,6 +4,11 @@ import game_elements.ResourceType;
 import game_elements.ResourceVillager;
 import game_elements.Resources;
 
+/**
+ * This class represents the Collector villager in the game. It extends the
+ * ResourceVillager class and is responsible for collecting wood resources for the
+ * player's village.
+ */
 public class Collector extends ResourceVillager {
     public Collector(){
         setHealth(70);
