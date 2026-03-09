@@ -5,7 +5,6 @@ import game_elements.building.*;
 import game_elements.inhabitant.villager.*;
 import game_elements.ResourceType;
 import game_elements.Resources;
-
 import java.util.Random;
 
 class VillageGenerator{
@@ -61,10 +60,12 @@ class VillageGenerator{
 
         return generatedVillage;
     }
-
-    
 }
 
+/**
+ * This class is responsible for generating random villages for the player to attack.
+ * It uses the VillageGenerator for abstraction on village generation process.
+ */
 public class AttackExplorer extends VillageGenerator{
     private Village candidate; 
 
@@ -72,10 +73,20 @@ public class AttackExplorer extends VillageGenerator{
         this.candidate = generateVillage();
     }
 
+    /**
+     * Returns the current candidate village for the player to attack.
+     * 
+     * @return the current candidate village
+     */
     public Village showCandidate(){
         return candidate;
     }
 
+    /**
+     * Generates a new candidate village for the player to attack.
+     * 
+     * @return the new candidate village
+     */
     public Village reRollCandidate(){
         this.candidate = generateVillage();
         return candidate;

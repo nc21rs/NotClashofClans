@@ -32,8 +32,7 @@ public class GameEngine {
     private final AttackExplorer attackExplorer;
     private UserInterface userInterface;
     private Village playerVillage;
-
-    UserInterface userInterface;
+    
     Village village;
     ArrayList<Task> upgradeTask;
 
