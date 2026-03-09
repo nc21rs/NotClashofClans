@@ -1,7 +1,9 @@
 package game_user_interface;
 
+import game_elements.ResourceType;
 import game_engine.ActionType;
 import game_elements.Village;
+import game_engine.GameEngine;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -22,13 +24,19 @@ public class UserInterface {
     /**
      * Method to display the map of the current village.
      */
-    public void displayMap() {
+    public void displayMap(Village village) {
         System.out.println("Map size is " + width + "x" + height);
         System.out.println("===== Map =====");
 
         // Print a grid of dots representing the map using streams
         IntStream.range(0, height).forEach(row -> {
-            IntStream.range(0, width).forEach(col -> System.out.print(". "));
+            IntStream.range(0, width).forEach(col -> {
+                if (village.mapBuild[row][col] != null){
+                    System.out.print(village.mapBuild[row][col].getShortName()+" ");
+                } else {
+                    System.out.print(". ");
+                }
+            });
             System.out.println();
         });
 
@@ -134,9 +142,73 @@ public class UserInterface {
             return;
         }
 
-        System.out.println("===== RESOURCES =====");
-        System.out.println(village.getResources());
+        System.out.println("\n===== RESOURCES =====");
+        System.out.printf("%d Food\n",village.getResources(ResourceType.FOOD));
+        System.out.printf("%d Wood\n",village.getResources(ResourceType.WOOD));
+        System.out.printf("%d Iron\n",village.getResources(ResourceType.IRON));
+        System.out.printf("%d Gold\n",village.getResources(ResourceType.GOLD));
+        System.out.printf("%d Population\n",village.getResources(ResourceType.POPULATION));
         System.out.println("=====================\n");
+    }
+
+    /**
+     * Prompts the user for X and Y coordinates and returns them as an array.
+     * @param maxX The maximum width of the map
+     * @param maxY The maximum height of the map
+     * @return int array [x,y]
+     */
+    public int[] getCoords(int maxX, int maxY) {
+        int x = -1;
+        int y = -1;
+
+        System.out.println("\n===== Enter Target Coordinates =====");
+
+        // Get X Coordinate
+        while (x < 0 || x >= maxX) {
+            System.out.printf("Enter X [0,%d]: ", maxX - 1);
+            if (scanner.hasNextInt()) {
+                x = scanner.nextInt();
+                if (x < 0 || x >= maxX) System.out.println("---- Out of bounds ----");
+            } else {
+                System.out.println("---- Enter a number ----");
+                scanner.next(); // Clear invalid token
+            }
+        }
+
+        // Get Y Coordinate
+        while (y < 0 || y >= maxY) {
+            System.out.printf("Enter Y [0,%d]: ", maxY - 1);
+            if (scanner.hasNextInt()) {
+                y = scanner.nextInt();
+                if (y < 0 || y >= maxY) System.out.println("---- Out of bounds ----");
+            } else {
+                System.out.println("---- Enter a number ----");
+                scanner.next(); // Clear invalid token
+            }
+        }
+
+        scanner.nextLine(); // Crucial: clear the "Enter" key from the buffer
+        return new int[]{x, y};
+    }
+
+    /**
+     * Pair of helper methods to print any construction
+     */
+    public void printTask(){
+        System.out.println("\n===== Construction: =====");
+    }
+    public void printTaskStrings(List<String[]> data) {
+        for (String[] row : data) {
+            System.out.printf("Building: %-10s | Time: %s%n", row[0], row[1]);
+        }
+    }
+
+    /***
+     * organization
+     * @param msg message to print
+     */
+    public void print(String msg){
+        System.out.println(msg);
     }
 
 }

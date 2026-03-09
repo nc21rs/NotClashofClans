@@ -4,6 +4,7 @@ public class Building implements Damageable, Upgradeable {
 
     /** Attributes */
     private String name;    //should have added this from the beginning
+    private char shortName = '?'; //default is ?
     private int health;
     private int posX;
     private int posY;
@@ -13,8 +14,13 @@ public class Building implements Damageable, Upgradeable {
     private Resources upgradeCost;
     private int maxLevel;
 
+
     /** Methods */
     // SETTERS
+    protected void setShortName(char shortName) {
+        this.shortName = shortName;
+    }
+
     protected void setUpgradeCost(Resources upgradeCost){this.upgradeCost = upgradeCost;}
     protected void setName(String name){this.name = name;}
     protected void setMaxLevel(int maxLevel){this.maxLevel = maxLevel;}
@@ -44,6 +50,11 @@ public class Building implements Damageable, Upgradeable {
     }
 
     // GETTERS
+
+    public char getShortName() {
+        return shortName;
+    }
+
     public int getPosX() {
         return posX;
     }

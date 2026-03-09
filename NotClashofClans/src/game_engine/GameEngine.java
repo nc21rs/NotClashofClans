@@ -5,6 +5,7 @@ import game_user_interface.InvalidMenuChoiceException;
 import game_user_interface.UserInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class Task{
     long start;
@@ -29,12 +30,12 @@ class Task{
 public class GameEngine {
     private boolean running;
     private long currentTime;
-    private final BattleComputer;
-    private final AttackExplorer;
+    private final BattleComputer battleComputer;
+    private final AttackExplorer attackExplorer;
     private UserInterface userInterface;
     private Village playerVillage;
   
-    UserInterface userInterface;
+//    UserInterface userInterface;
     Village village;
     ArrayList<Task> upgradeTask;
     
@@ -47,8 +48,8 @@ public class GameEngine {
         // initialize important game engine variables
         running = true; // the game is running
         currentTime = System.currentTimeMillis(); 
-        userInterface = new UserInterface(20, 20);
         village = new Village();
+        userInterface = new UserInterface(village.getMapSize(), village.getMapSize());  //sync village map size with interface
         upgradeTask = new ArrayList<>();
         battleComputer = new BattleComputer();
         attackExplorer = new AttackExplorer();
@@ -63,7 +64,11 @@ public class GameEngine {
         //loop until user decides to quit
         while(running){
             update(); //check any running tasks.
+            //display info
             userInterface.displayResources(village);
+            //display map
+            userInterface.displayMap(village);
+            //display options to user
             userInterface.displayOptions();
 
             try{
@@ -79,9 +84,12 @@ public class GameEngine {
         switch(actionType){
             case QUIT:
                 running=false;
+                System.out.println("Quitting Game");
                 break;
             case UPGRADE_BUILD:
                 //get x and y coords
+                int[] coords = userInterface.getCoords(village.getMapSize(),village.getMapSize());
+                requestUpgrade(coords[0],coords[1]);
                 break;
             case BUILD:
                 //pick building, then get x and y
@@ -91,8 +99,14 @@ public class GameEngine {
             case ATTACK:
                 //prompt user to scout bases and perform attack
                 break;
+            case PRODUCE:
+
+            case EXPLORE:
+
+            case UPGRADE_TROOP:
+
             default:
-                System.out.println("That is not an option");
+                userInterface.print("That's not an option");
         }
     }
 
@@ -105,6 +119,7 @@ public class GameEngine {
             if(task.isDone()){  //check if upgrade task done
                 task.target.upgrade();  //apply game upgrade.
                 iterator.remove();  //remove task from list. Via iterator. (By-passes problem of for-each removing live item from list)
+
             }
         }
     }
@@ -114,7 +129,7 @@ public class GameEngine {
         if (canUpgrade(building,village)){  //is it upgrade-able?
             village.spendResources(building.getUpgradeCost());
             upgradeTask.add(new Task(building,60)); //Lets just assume all upgrades take 60seconds
-
+            System.out.println("Upgrading: "+building.getName());
         }
       //otherwise, its not.
     }
@@ -350,4 +365,22 @@ public class GameEngine {
 
         village.generateResources();
     }
+
+    /**
+     * Print tasks, but trying to keep all printing to UI
+     */
+    public void showTasks() {
+        List<String[]> taskData = new ArrayList<>();
+        userInterface.printTask();
+        long now = System.currentTimeMillis();
+        for (Task t : upgradeTask) {
+            String name = t.target.getName();
+            String time = ((t.start + t.duration - now) / 1000) + "s";
+            taskData.add(new String[]{name, time});
+        }
+
+        // Pass only the strings to the UI
+        userInterface.printTaskStrings(taskData);
+    }
+
 }

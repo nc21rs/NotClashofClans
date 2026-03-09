@@ -17,7 +17,7 @@ public class VillageHall extends Building {
         setLevel(1);
         setMaxLevel(10);
         setDestroyed(false);
-
+        setShortName('H');
         // Set upgrade cost
         Resources upgradeCost = new Resources();
         upgradeCost.setAmount(ResourceType.IRON, 25);
