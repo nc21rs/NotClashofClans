@@ -41,7 +41,7 @@ public class GameEngine {
     private final BattleComputer battleComputer;
     private final AttackExplorer attackExplorer;
     private UserInterface userInterface;
-    private Village playerVillage;
+    private Village exploredVillage;
 
     Village village;
     ArrayList<Task> upgradeTask;
@@ -60,6 +60,7 @@ public class GameEngine {
         upgradeTask = new ArrayList<>();
         battleComputer = new BattleComputer();
         attackExplorer = new AttackExplorer();
+        exploredVillage = attackExplorer.reRollCandidate();
 
         // run game
         start();
@@ -92,26 +93,54 @@ public class GameEngine {
                 running = false;
                 userInterface.print("Quitting Game");
                 break;
+
             case UPGRADE_BUILD:
                 // get x and y coords
                 int[] coords = userInterface.getCoords(village.getMapSize(), village.getMapSize());
                 requestUpgrade(coords[0], coords[1]);
                 break;
+
             case BUILD:
                 // pick building, then get x and y
-                int[] buildSelection = userInterface.getCoords(village.getMapSize(),village.getMapSize());
-                village.placeFarm(buildSelection[0],buildSelection[1]);
+                int[] buildSelection = userInterface.getCoords(village.getMapSize(), village.getMapSize());
+                village.placeFarm(buildSelection[0], buildSelection[1]);
+                break;
+
             case TRAIN:
-                // prompt user with options to train troops
+                userInterface.print("Train not implemented yet");
                 break;
+
             case ATTACK:
-                // prompt user to scout bases and perform attack
+                if (exploredVillage == null) {
+                    userInterface.print("No village explored yet.");
+                }
+
+                if (!canAttack(village.getArmy(), exploredVillage)) {
+                    userInterface.print("Cannot attack.");
+                }
+
+                ComputedBattle battleResult = attack(village, exploredVillage);
+
+                if (battleResult.didWin()) {
+                    userInterface.print("You won the battle. Loot gained: " + battleResult.getLoot().toString());
+                    village.addResources(battleResult.getLoot());
+                } else {
+                    userInterface.print("You lost the battle.");
+                }
                 break;
+
             case PRODUCE:
+                userInterface.print("Produce not implemented yet");
+                break;
 
             case EXPLORE:
+                exploredVillage = attackExplorer.reRollCandidate();
+                userInterface.print("Found a new village");
+                break;
 
             case UPGRADE_TROOP:
+                userInterface.print("Upgrade troop not implemented yet");
+                break;
 
             default:
                 userInterface.print("That's not an option");
@@ -127,7 +156,8 @@ public class GameEngine {
 
             if (task.isDone()) { // check if upgrade task done
                 task.target.upgrade(); // apply game upgrade.
-                iterator.remove(); // remove task from list. Via iterator. (By-passes problem of for-each removing live item from list)
+                iterator.remove(); // remove task from list. Via iterator. (By-passes problem of for-each removing
+                                   // live item from list)
 
             }
         }
@@ -139,8 +169,8 @@ public class GameEngine {
         if (canUpgrade(building, village)) { // is it upgrade-able?
             village.spendResources(building.getUpgradeCost());
             upgradeTask.add(new Task(building, 60)); // Lets just assume all upgrades take 60seconds
-            userInterface.print("New Task: Upgrade "+building.getName());
-        } else{
+            userInterface.print("New Task: Upgrade " + building.getName());
+        } else {
             // otherwise, its not.
             userInterface.print("Failed: Cannot Upgrade Building");
         }
@@ -196,9 +226,9 @@ public class GameEngine {
         // get cost to upgrade element and check if player has enough resources
         Resources cost = element.getUpgradeCost();
 
-//        if (!village.hasSufficientResources(cost)) {
-//            return false;
-//        }
+        // if (!village.hasSufficientResources(cost)) {
+        // return false;
+        // }
 
         return true;
     }
@@ -395,17 +425,17 @@ public class GameEngine {
         List<String[]> taskData = new ArrayList<>();
         userInterface.printTask();
         long now = System.currentTimeMillis();
-        if(upgradeTask.isEmpty()){
+        if (upgradeTask.isEmpty()) {
             userInterface.print("Nothing is upgrading");
         } else {
             for (Task t : upgradeTask) {
                 String name = t.target.getName();
                 String time;
-                if(t.start + t.duration - now <=0)
+                if (t.start + t.duration - now <= 0)
                     time = "done";
                 else {
                     time = ((t.start + t.duration - now) / 1000) + "s";
-                    taskData.add(new String[]{name, time});
+                    taskData.add(new String[] { name, time });
                 }
             }
 
