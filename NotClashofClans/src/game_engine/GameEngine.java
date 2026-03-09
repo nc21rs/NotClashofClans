@@ -7,23 +7,22 @@ import game_user_interface.UserInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-class Task{
+class Task {
     long start;
     long duration;
     boolean done;
     Building target;
-    public Task(Building target, long durationSeconds){
+
+    public Task(Building target, long durationSeconds) {
         this.target = target;
         start = System.currentTimeMillis();
         duration = durationSeconds * 1000;
         done = false;
     }
 
-    public boolean isDone(){
-        return System.currentTimeMillis() >= (start+duration);
+    public boolean isDone() {
+        return System.currentTimeMillis() >= (start + duration);
     }
-
-
 
 }
 
@@ -34,28 +33,26 @@ public class GameEngine {
     private final AttackExplorer attackExplorer;
     private UserInterface userInterface;
     private Village playerVillage;
-  
-//    UserInterface userInterface;
+    
     Village village;
     ArrayList<Task> upgradeTask;
-    
-    
+
     /**
-     * Constructor. Initializes all required game parameters/processes 
+     * Constructor. Initializes all required game parameters/processes
      * user_interface, players
      */
     public GameEngine() {
         // initialize important game engine variables
         running = true; // the game is running
-        currentTime = System.currentTimeMillis(); 
+        currentTime = System.currentTimeMillis();
+        userInterface = new UserInterface(20, 20);
         village = new Village();
         userInterface = new UserInterface(village.getMapSize(), village.getMapSize());  //sync village map size with interface
         upgradeTask = new ArrayList<>();
         battleComputer = new BattleComputer();
         attackExplorer = new AttackExplorer();
-        
-      
-        //run game
+
+        // run game
         start();
     }
 
@@ -71,7 +68,7 @@ public class GameEngine {
             //display options to user
             userInterface.displayOptions();
 
-            try{
+            try {
                 ActionType actionType = userInterface.getUserAction();
                 action(actionType);
             } catch (InvalidMenuChoiceException e) {
@@ -80,8 +77,8 @@ public class GameEngine {
         }
     }
 
-    public void action(ActionType actionType){
-        switch(actionType){
+    public void action(ActionType actionType) {
+        switch (actionType) {
             case QUIT:
                 running=false;
                 userInterface.print("Quitting Game");
@@ -92,12 +89,12 @@ public class GameEngine {
                 requestUpgrade(coords[0],coords[1]);
                 break;
             case BUILD:
-                //pick building, then get x and y
+                // pick building, then get x and y
             case TRAIN:
-                //prompt user with options to train troops
+                // prompt user with options to train troops
                 break;
             case ATTACK:
-                //prompt user to scout bases and perform attack
+                // prompt user to scout bases and perform attack
                 break;
             case PRODUCE:
 
@@ -110,30 +107,30 @@ public class GameEngine {
         }
     }
 
-    public void update(){
+    public void update() {
         currentTime = System.currentTimeMillis();
-        java.util.Iterator<Task> iterator = upgradeTask.iterator(); //analyize list of running upgrades.
-        while(iterator.hasNext()){  //for each task.
+        java.util.Iterator<Task> iterator = upgradeTask.iterator(); // analyize list of running upgrades.
+        while (iterator.hasNext()) { // for each task.
             Task task = iterator.next();
 
-            if(task.isDone()){  //check if upgrade task done
-                task.target.upgrade();  //apply game upgrade.
-                iterator.remove();  //remove task from list. Via iterator. (By-passes problem of for-each removing live item from list)
-
+            if (task.isDone()) { // check if upgrade task done
+                task.target.upgrade(); // apply game upgrade.
+                iterator.remove(); // remove task from list. Via iterator. (By-passes problem of for-each removing
+                                   // live item from list)
             }
         }
     }
-  //user wants to upgrade selected grid.
-    public void requestUpgrade(int x, int y){
+
+    // user wants to upgrade selected grid.
+    public void requestUpgrade(int x, int y) {
         Building building = village.mapBuild[x][y];
-        if (canUpgrade(building,village)){  //is it upgrade-able?
+        if (canUpgrade(building, village)) { // is it upgrade-able?
             village.spendResources(building.getUpgradeCost());
             upgradeTask.add(new Task(building,60)); //Lets just assume all upgrades take 60seconds
             userInterface.print("Upgrading: "+building.getName());
         }
-      //otherwise, its not.
+        // otherwise, its not.
     }
-
 
     /**
      * Returns a boolean value indicating whether a player can attack a village
@@ -183,11 +180,10 @@ public class GameEngine {
 
         // get cost to upgrade element and check if player has enough resources
         Resources cost = element.getUpgradeCost();
-        
-        if (!village.hasSufficientResources(cost)){
+
+        if (!village.hasSufficientResources(cost)) {
             return false;
         }
-
 
         return true;
     }
@@ -207,7 +203,7 @@ public class GameEngine {
 
         // get cost to build building and check if player has enough resources
         Resources cost = building.getProductionCost();
-        if (!village.hasSufficientResources(cost)){
+        if (!village.hasSufficientResources(cost)) {
             return false;
         }
 
@@ -244,11 +240,10 @@ public class GameEngine {
 
         // check if village has enough resources to train inhabitant
         Resources cost = inhabitant.getProductionCost();
-        
-        if (!village.hasSufficientResources(cost)){
+
+        if (!village.hasSufficientResources(cost)) {
             return false;
         }
-
 
         // check if village has enough population capacity to train inhabitant
         if (village.getPopulation() >= village.getPopulationMax()) {
@@ -268,16 +263,25 @@ public class GameEngine {
     /**
      * Returns a ComputedBattle object representing the result of an attack
      * 
-     * @param attacker the Army that is attacking
+     * @param attacker the Village that has the army attacking
      * @param defender the Village that is being attacked
      * @return a ComputedBattle object representing the result of the attack
      */
-    public ComputedBattle attack(Army attacker, Village defender) {
-        // check if attack is possible
-        if (canAttack(attacker, defender)) { // attack possible
-            return battleComputer.computedBattle(attacker, defender);
-        } else { // attack not possible
-            return null;
+    public ComputedBattle attack(Village attacker, Village defender) {
+
+        ComputedBattle battleResult = battleComputer.computedBattle(attacker, defender);
+
+        if (battleResult.didWin()) {
+            // Attacker won: add loot to attacker, remove from defender, and set guard time
+            // for defender
+            defender.spendResources(battleResult.getLoot());
+            defender.setGuardTime(currentTime + 3600000);
+            attacker.addResources(battleResult.getLoot());
+            return battleResult;
+        } else {
+            // Attacker lost: set guard time for attacker
+            attacker.setGuardTime(currentTime + 3600000);
+            return battleResult;
         }
     }
 
@@ -346,7 +350,7 @@ public class GameEngine {
      * @return a Village object generated when exploring for new villages
      */
     public Village exploreVillages() {
-        return new Village();
+        return attackExplorer.reRollCandidate();
     }
 
     /**
@@ -359,7 +363,7 @@ public class GameEngine {
     }
 
     public void villageCollectResources(Village village) {
-        if (village == null){
+        if (village == null) {
             return;
         }
 
