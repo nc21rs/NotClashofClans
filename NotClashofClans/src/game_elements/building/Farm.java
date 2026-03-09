@@ -4,6 +4,10 @@ import game_elements.ResourceBuilding;
 import game_elements.ResourceType;
 import game_elements.Resources;
 
+/**
+ * This class represents the Farm building in the game. 
+ * It also extends the ResourceBuilding class.
+ */
 public class Farm extends ResourceBuilding {
     private int populationFed;
     public Farm(){

@@ -10,6 +10,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+/**
+ * This class represents the user interface of the game. It is responsible for
+ * displaying
+ * the game state to the user and getting user input for actions. It
+ * communicates with
+ * GameEngine to send user action requests and receive updates on the game
+ * state.
+ */
 public class UserInterface {
     private int width;
     private int height;

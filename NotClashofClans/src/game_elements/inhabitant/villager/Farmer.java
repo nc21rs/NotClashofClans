@@ -4,6 +4,12 @@ import game_elements.ResourceType;
 import game_elements.Resources;
 import game_elements.ResourceVillager;
 
+/**
+ * This class represents the Farmer villager in the game. It extends the
+ * ResourceVillager class and is responsible for producing food resources for
+ * the
+ * player's village.
+ */
 public class Farmer extends ResourceVillager {
     public Farmer() {
         setHealth(70);

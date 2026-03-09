@@ -4,6 +4,10 @@ import game_elements.ArmyUnit;
 import game_elements.ResourceType;
 import game_elements.Resources;
 
+/**
+ * This class represents the Knight unit in the game. It extends the ArmyUnit
+ * class.
+ */
 public class Knight extends ArmyUnit {
     public Knight() {
         setHealth(150);

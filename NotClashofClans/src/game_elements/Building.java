@@ -1,5 +1,9 @@
 package game_elements;
 
+/**
+ * This class represents a building in the game. It implements the Damageable
+ * and Upgradeable interfaces.
+ */
 public class Building implements Damageable, Upgradeable {
 
     /** Attributes */

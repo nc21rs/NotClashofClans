@@ -1,7 +1,9 @@
 package game_elements;
 
-
-
+/**
+ * This class represents a resource building in the game. It extends the
+ * Building class.
+ */
 public class ResourceBuilding extends Building{
     /**Attributes*/
     int workerCapacity;     //number of workers required to work

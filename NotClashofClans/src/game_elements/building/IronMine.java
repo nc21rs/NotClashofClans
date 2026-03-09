@@ -4,9 +4,13 @@ import game_elements.ResourceBuilding;
 import game_elements.ResourceType;
 import game_elements.Resources;
 
+/**
+ * This class represents the Iron Mine building in the game.
+ * It also extends the ResourceBuilding class.
+ */
 public class IronMine extends ResourceBuilding {
-    public IronMine(){
-        //assign values for building
+    public IronMine() {
+        // assign values for building
         setHealth(25);
         setName("Iron Mine");
         setLevel(1);
@@ -15,15 +19,15 @@ public class IronMine extends ResourceBuilding {
         setWorkerCapacity(3);
         setShortName('I');
 
-        //Build Cost
+        // Build Cost
         Resources buildCost = new Resources();
-        buildCost.setAmount(ResourceType.WOOD,50);
-        //Build Upgrade
+        buildCost.setAmount(ResourceType.WOOD, 50);
+        // Build Upgrade
         Resources upgradeCost = new Resources();
-        upgradeCost.setAmount(ResourceType.IRON,25);
-        //Resource Production Type and Quantity
+        upgradeCost.setAmount(ResourceType.IRON, 25);
+        // Resource Production Type and Quantity
         Resources productionOutput = new Resources();
-        productionOutput.setAmount(ResourceType.IRON,75);
+        productionOutput.setAmount(ResourceType.IRON, 75);
 
         setProduction(productionOutput);
         setProductionCost(buildCost);

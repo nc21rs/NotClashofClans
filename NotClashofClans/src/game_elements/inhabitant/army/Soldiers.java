@@ -4,6 +4,10 @@ import game_elements.ArmyUnit;
 import game_elements.ResourceType;
 import game_elements.Resources;
 
+/**
+ * This class represents the Soldiers unit in the game. It extends the ArmyUnit
+ * class.
+ */
 public class Soldiers extends ArmyUnit {
     public Soldiers() {
         setHealth(100);

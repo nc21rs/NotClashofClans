@@ -4,6 +4,10 @@ import game_elements.*;
 
 import java.util.Random;
 
+/**
+ * This class represents the result of a computed battle from the
+ * BattleComputer.
+ */
 class ComputedBattle {
     private int attackScore;
     private int defenceScore;
@@ -34,6 +38,10 @@ class ComputedBattle {
     }
 }
 
+/**
+ * This class is responsible for computing the outcome of a battle between an
+ * attacking village and a defending village.
+ */
 public class BattleComputer {
     // For randomness in battle outcomes, loot, etc.
     // Will use later for more complex battle mechanics

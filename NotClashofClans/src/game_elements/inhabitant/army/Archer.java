@@ -4,6 +4,9 @@ import game_elements.ArmyUnit;
 import game_elements.ResourceType;
 import game_elements.Resources;
 
+/**
+ * This class represents the Archer unit in the game. It extends the ArmyUnit class.
+ */
 public class Archer extends ArmyUnit {
     public Archer() {
         setHealth(80);

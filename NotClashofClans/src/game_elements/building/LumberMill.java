@@ -4,9 +4,13 @@ import game_elements.ResourceBuilding;
 import game_elements.ResourceType;
 import game_elements.Resources;
 
+/**
+ * This class represents the Lumber Mill building in the game.
+ * It also extends the ResourceBuilding class.
+ */
 public class LumberMill extends ResourceBuilding {
-    public LumberMill(){
-        //assign building values
+    public LumberMill() {
+        // assign building values
         setHealth(25);
         setName("Lumber Mill");
         setLevel(1);
@@ -15,15 +19,15 @@ public class LumberMill extends ResourceBuilding {
         setWorkerCapacity(2);
         setShortName('L');
 
-        //Build Cost
+        // Build Cost
         Resources buildCost = new Resources();
-        buildCost.setAmount(ResourceType.FOOD,25);
-        //Build Upgrade
+        buildCost.setAmount(ResourceType.FOOD, 25);
+        // Build Upgrade
         Resources upgradeCost = new Resources();
-        upgradeCost.setAmount(ResourceType.WOOD,25);
-        //Resource Production Type and Quantity
+        upgradeCost.setAmount(ResourceType.WOOD, 25);
+        // Resource Production Type and Quantity
         Resources productionOutput = new Resources();
-        productionOutput.setAmount(ResourceType.WOOD,75);
+        productionOutput.setAmount(ResourceType.WOOD, 75);
 
         setProduction(productionOutput);
         setProductionCost(buildCost);
