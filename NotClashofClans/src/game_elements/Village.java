@@ -1,13 +1,8 @@
 package game_elements;
 
-import game_elements.building.Cannon;
-import game_elements.building.Farm;
-import game_elements.building.LumberMill;
-import game_elements.inhabitant.villager.Collector;
-import game_elements.inhabitant.villager.Farmer;
-import game_elements.inhabitant.villager.ResourceVillager;
+import game_elements.building.*;
+import game_elements.inhabitant.villager.*;
 import game_player_database.PlayerDataBase;
-
 import java.util.ArrayList;
 import java.util.List;
 

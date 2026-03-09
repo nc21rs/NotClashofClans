@@ -31,8 +31,8 @@ public class UserInterface {
         // Print a grid of dots representing the map using streams
         IntStream.range(0, height).forEach(row -> {
             IntStream.range(0, width).forEach(col -> {
-                if (village.mapBuild[row][col] != null){
-                    System.out.print(village.mapBuild[row][col].getShortName()+" ");
+                if (village.getBuildingAt(row, col) != null) {
+                    System.out.print(village.getBuildingAt(row, col).getShortName() + " ");
                 } else {
                     System.out.print(". ");
                 }
@@ -143,17 +143,18 @@ public class UserInterface {
         }
 
         System.out.println("\n===== RESOURCES =====");
-        //prints each resource individually.
-        System.out.printf("%d Food\n",village.getResources(ResourceType.FOOD));
-        System.out.printf("%d Wood\n",village.getResources(ResourceType.WOOD));
-        System.out.printf("%d Iron\n",village.getResources(ResourceType.IRON));
-        System.out.printf("%d Gold\n",village.getResources(ResourceType.GOLD));
-        System.out.printf("%d Population\n",village.getResources(ResourceType.POPULATION));
+        // prints each resource individually.
+        System.out.printf("%d Food\n", village.getResourceAmount(ResourceType.FOOD));
+        System.out.printf("%d Wood\n", village.getResourceAmount(ResourceType.WOOD));
+        System.out.printf("%d Iron\n", village.getResourceAmount(ResourceType.IRON));
+        System.out.printf("%d Gold\n", village.getResourceAmount(ResourceType.GOLD));
+        System.out.printf("%d Population\n", village.getResourceAmount(ResourceType.POPULATION));
         System.out.println("=====================\n");
     }
 
     /**
      * Prompts the user for X and Y coordinates and returns them as an array.
+     * 
      * @param maxX The maximum width of the map
      * @param maxY The maximum height of the map
      * @return int array [x,y]
@@ -169,7 +170,8 @@ public class UserInterface {
             System.out.printf("Enter X [0,%d]: ", maxX - 1);
             if (scanner.hasNextInt()) {
                 x = scanner.nextInt();
-                if (x < 0 || x >= maxX) System.out.println("---- Out of bounds ----");
+                if (x < 0 || x >= maxX)
+                    System.out.println("---- Out of bounds ----");
             } else {
                 System.out.println("---- Enter a number ----");
                 scanner.next(); // Clear invalid token
@@ -181,7 +183,8 @@ public class UserInterface {
             System.out.printf("Enter Y [0,%d]: ", maxY - 1);
             if (scanner.hasNextInt()) {
                 y = scanner.nextInt();
-                if (y < 0 || y >= maxY) System.out.println("---- Out of bounds ----");
+                if (y < 0 || y >= maxY)
+                    System.out.println("---- Out of bounds ----");
             } else {
                 System.out.println("---- Enter a number ----");
                 scanner.next(); // Clear invalid token
@@ -189,16 +192,17 @@ public class UserInterface {
         }
 
         scanner.nextLine(); // Crucial: clear the "Enter" key from the buffer
-        return new int[]{x, y};
+        return new int[] { x, y };
     }
 
     /**
      * (WIP)
      * Pair of helper methods to print any upgrade that is in progress
      */
-    public void printTask(){
+    public void printTask() {
         System.out.println("\n===== Upgrades: =====");
     }
+
     public void printTaskStrings(List<String[]> data) {
         for (String[] row : data) {
             System.out.printf("Building: %-10s | Time: %s%n", row[0], row[1]);
@@ -207,9 +211,10 @@ public class UserInterface {
 
     /***
      * organization
+     * 
      * @param msg message to print
      */
-    public void print(String msg){
+    public void print(String msg) {
         System.out.println(msg);
     }
 

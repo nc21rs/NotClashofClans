@@ -1,3 +1,4 @@
+package game_elements;
 
 public class Building implements Damageable, Upgradeable {
 
