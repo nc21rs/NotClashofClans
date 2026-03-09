@@ -84,7 +84,7 @@ public class GameEngine {
         switch(actionType){
             case QUIT:
                 running=false;
-                System.out.println("Quitting Game");
+                userInterface.print("Quitting Game");
                 break;
             case UPGRADE_BUILD:
                 //get x and y coords
@@ -129,7 +129,7 @@ public class GameEngine {
         if (canUpgrade(building,village)){  //is it upgrade-able?
             village.spendResources(building.getUpgradeCost());
             upgradeTask.add(new Task(building,60)); //Lets just assume all upgrades take 60seconds
-            System.out.println("Upgrading: "+building.getName());
+            userInterface.print("Upgrading: "+building.getName());
         }
       //otherwise, its not.
     }
@@ -367,7 +367,8 @@ public class GameEngine {
     }
 
     /**
-     * Print tasks, but trying to keep all printing to UI
+     * Passses all upgrades information that are queued. Trying to keep all printing to UI class
+     * Since Task obj is private, String containing task is being passed to userInterface class
      */
     public void showTasks() {
         List<String[]> taskData = new ArrayList<>();

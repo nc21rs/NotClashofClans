@@ -143,6 +143,7 @@ public class UserInterface {
         }
 
         System.out.println("\n===== RESOURCES =====");
+        //prints each resource individually.
         System.out.printf("%d Food\n",village.getResources(ResourceType.FOOD));
         System.out.printf("%d Wood\n",village.getResources(ResourceType.WOOD));
         System.out.printf("%d Iron\n",village.getResources(ResourceType.IRON));
@@ -192,10 +193,11 @@ public class UserInterface {
     }
 
     /**
-     * Pair of helper methods to print any construction
+     * (WIP)
+     * Pair of helper methods to print any upgrade that is in progress
      */
     public void printTask(){
-        System.out.println("\n===== Construction: =====");
+        System.out.println("\n===== Upgrades: =====");
     }
     public void printTaskStrings(List<String[]> data) {
         for (String[] row : data) {
