@@ -1,11 +1,21 @@
 package game_elements;
 
-public class ResourceVillager extends Inhabitant{
-    /**Attributes*/
+/**
+ * This class represents a villager that produces resources for the player's
+ * village. Extends the Inhabitant class.
+ */
+public class ResourceVillager extends Inhabitant {
+
     private int productionCapacity;
     private ResourceType resourceProduced;
 
-    /**Attributes*/
+    public ResourceVillager() {
+        // Default values for a resource villager
+        super();
+        this.productionCapacity = 10;
+        this.resourceProduced = ResourceType.FOOD;
+    }
+
     protected void setProductionCapacity(int productionCapacity) {
         this.productionCapacity = productionCapacity;
     }
@@ -17,67 +27,20 @@ public class ResourceVillager extends Inhabitant{
     public int getProductionCapacity() {
         return productionCapacity;
     }
-    
+
     public ResourceType getResourceProduced() {
         return resourceProduced;
     }
 
-    public Resources produceResource(){
+    /**
+     * Produces resources based on the villager's production capacity and
+     * the type of resource it produces.
+     * 
+     * @return the resources produced by the villager
+     */
+    public Resources produceResource() {
         Resources produced = new Resources();
         produced.setAmount(resourceProduced, productionCapacity);
         return produced;
-    }
-
-    @Override
-    protected void setHealth(int health) {
-        super.setHealth(health);
-    }
-    @Override
-    protected void setDestroyed(boolean destroyed) {
-        super.setDestroyed(destroyed);
-    }
-    @Override
-    protected void setLevel(int level) {
-        super.setLevel(level);
-    }
-    @Override
-    protected void setPosY(int posY) {
-        super.setPosY(posY);
-    }
-    @Override
-    protected void setPosX(int posX) {
-        super.setPosX(posX);
-    }
-    @Override
-    protected void setAttackDamage(int attackDamage) {
-        super.setAttackDamage(attackDamage);
-    }
-    @Override
-    protected void setRange(int range) {
-        super.setRange(range);
-    }
-    @Override
-    public int getPosX() {
-        return super.getPosX();
-    }
-    @Override
-    public int getPosY() {
-        return super.getPosY();
-    }
-    @Override
-    public int getLevel() {
-        return super.getLevel();
-    }
-    @Override
-    public int getHealth() {
-        return super.getHealth();
-    }
-    @Override
-    public int getAttackDamage() {
-        return super.getAttackDamage();
-    }
-    @Override
-    public int getRange() {
-        return super.getRange();
     }
 }

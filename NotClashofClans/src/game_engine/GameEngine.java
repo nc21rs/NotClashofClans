@@ -33,7 +33,7 @@ public class GameEngine {
     private final AttackExplorer attackExplorer;
     private UserInterface userInterface;
     private Village playerVillage;
-    
+
     Village village;
     ArrayList<Task> upgradeTask;
 
@@ -123,7 +123,7 @@ public class GameEngine {
 
     // user wants to upgrade selected grid.
     public void requestUpgrade(int x, int y) {
-        Building building = village.mapBuild[x][y];
+        Building building = village.getBuildingAt(x, y);
         if (canUpgrade(building, village)) { // is it upgrade-able?
             village.spendResources(building.getUpgradeCost());
             upgradeTask.add(new Task(building,60)); //Lets just assume all upgrades take 60seconds

@@ -42,6 +42,11 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
         this.posX = posX;
     }
 
+    protected void setPosition(int x, int y) {
+        this.posX = x;
+        this.posY = y;
+    }
+
     protected void setAttackDamage(int attackDamage) {
         this.attackDamage = attackDamage;
     }

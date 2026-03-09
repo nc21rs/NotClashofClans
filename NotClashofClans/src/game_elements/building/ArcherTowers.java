@@ -4,6 +4,11 @@ import game_elements.DefenceBuilding;
 import game_elements.ResourceType;
 import game_elements.Resources;
 
+
+/**
+ * This class represents the Archer Towers building in the game. 
+ * It also extends the DefenceBuilding class.
+ */
 public class ArcherTowers extends DefenceBuilding {
     public ArcherTowers(){
         //assign building values
