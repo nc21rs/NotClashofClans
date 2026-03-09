@@ -1,14 +1,18 @@
 package game_elements;
 
 import game_player_database.PlayerDataBase;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import game_elements.inhabitant.villager.*;
+import game_elements.building.*;
 
+/**
+ * This class represent a village's resource storage.
+ * It perform operations on the resources.
+ */
 class ResourceStorage {
-    private int[] resources; // player has
-    private int[] capacity; // player maximum
+    private int[] resources;
+    private int[] capacity;
 
     public ResourceStorage() {
         resources = new int[ResourceType.values().length];
@@ -21,7 +25,12 @@ class ResourceStorage {
         }
     }
 
-    // method to add a specific quantity of a resource type to the player's storage
+    /**
+     * Adds a specific quantity of a resource type to the player's storage.
+     * 
+     * @param resourceType the type of resource to add
+     * @param qty          the quantity of the resource to add
+     */
     public void add(ResourceType resourceType, int qty) {
         int index = resourceType.getIndex();
         resources[index] += qty;
@@ -32,8 +41,12 @@ class ResourceStorage {
         }
     }
 
-    // method to subtract a specific quantity of a resource type from the player's
-    // storage
+    /**
+     * Subtracts a specific quantity of a resource type from the player's storage.
+     * 
+     * @param resourceType the type of resource to subtract
+     * @param qty          the quantity of the resource to subtract
+     */
     public void sub(ResourceType resourceType, int qty) {
         int index = resourceType.getIndex();
         resources[index] -= qty;
@@ -44,12 +57,18 @@ class ResourceStorage {
         }
     }
 
+    /**
+     * Returns the capacity of a specific resource type in the player's storage.
+     * 
+     * @param resourceType the type of resource to check
+     * @return the capacity of the specified resource type
+     */
     public int getCapacity(ResourceType resourceType) {
         return capacity[resourceType.getIndex()];
     }
 
     /**
-     * Returns the amount of a specific resource type that the player has
+     * Returns the amount of a specific resource type that the player has.
      * 
      * @param resourceType the type of resource to check
      * 
@@ -58,19 +77,20 @@ class ResourceStorage {
     public int getResource(ResourceType resourceType) {
         return resources[resourceType.getIndex()];
     }
-
-    private void setCapacity() {
-    }
-
 }
 
+/**
+ * This class represents the player's village in the game. It contains
+ * information about all elements of the village (buildings, inhabitants,
+ * resources, etc.)
+ * and methods to manipulate them.
+ */
 public class Village {
-    // Map variables
-    final static int MAP_SIZE = 11; // keep it small for now
+    private static final int MAP_SIZE = 11; // keep it small for now
 
-    // attacking function are to cross-reference between maps.
-    public Building[][] mapBuild;
-    public Inhabitant[][] mapHabit; // both attacking troops and defending inhabitants share this plane
+    // Maps to keep track of building and inhabitant positions in the village
+    private Building[][] mapBuild;
+    private Inhabitant[][] mapHabit;
 
     private PlayerDataBase player;
     private ResourceStorage resourceStorage;
@@ -89,7 +109,7 @@ public class Village {
 
         // initialize variables
         resourceStorage = new ResourceStorage();
-        populationSize = 2;
+        populationSize = 0;
         populationMax = 100;
         guardTime = 0;
         buildings = new ArrayList<>();
@@ -97,7 +117,31 @@ public class Village {
         army = new Army();
         villageHall = new VillageHall();
 
+        // add initial buildings: 1 village hall, 1 farm, 1lumber mill
+        Building building1 = new Farm();
+        Building building2 = new LumberMill();
+
+        // set positions for initial buildings
+        villageHall.setPosition(5, 5);
+        building1.setPosition(4, 5);
+        building2.setPosition(6, 5);
+
         addBuilding(villageHall);
+        addBuilding(building1);
+        addBuilding(building2);
+
+        // add initial inhabitants: 1 farmer, 1 collector
+        ResourceVillager villager1 = new Farmer();
+        ResourceVillager villager2 = new Collector();
+
+        // set positions for initial inhabitants
+        villager1.setPosition(4, 4);
+        villager2.setPosition(6, 4);
+
+        addInhabitant(villager1);
+        addInhabitant(villager2);
+
+        // TODO: load player data if exists, otherwise start with default village
 
         /**
          * Load Player Data
@@ -107,15 +151,6 @@ public class Village {
          * user's pc
          */
 
-    }
-
-    // method to set the resource storage of the village
-    protected void setResourceStorage(ResourceStorage resourceStorage) {
-        if (resourceStorage == null) {
-            return;
-        }
-
-        this.resourceStorage = resourceStorage;
     }
 
     public void setGuardTime(long guardTime) {
@@ -138,7 +173,6 @@ public class Village {
         return army;
     }
 
-    // method to get the amount of a specific resource type that the player has
     public int getResourceAmount(ResourceType type) {
         return resourceStorage.getResource(type);
     }
@@ -159,34 +193,86 @@ public class Village {
         return new ArrayList<>(inhabitants); // copy to prevent external modification
     }
 
-    // method to add a building to the village
+    /**
+     * Adds a building (if valid) to the village and updates the map accordingly.
+     * 
+     * @param building the building to add
+     */
     public void addBuilding(Building building) {
         if (building == null) {
             return;
         }
 
-        buildings.add(building);
-
         // update map with new building
         int x = building.getPosX();
         int y = building.getPosY();
 
-        if (x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE) {
-            mapBuild[x][y] = building;
+        // check if position is valid
+        if (x < 0 || x >= MAP_SIZE || y < 0 || y >= MAP_SIZE) {
+            return;
         }
+
+        // check if position is already occupied
+        if (mapBuild[x][y] != null) {
+            return;
+        }
+
+        buildings.add(building);
+        mapBuild[x][y] = building;
     }
 
-    // method to add an inhabitant to the village
+    /**
+     * Adds an inhabitant (if valid) to the village.
+     *
+     * @param inhabitant the inhabitant to add
+     */
     public void addInhabitant(Inhabitant inhabitant) {
         if (inhabitant == null) {
             return;
         }
 
+        // check if max population reached
+        if (populationSize >= populationMax) {
+            return;
+        }
+
+        // update map with new inhabitant
+        int x = inhabitant.getPosX();
+        int y = inhabitant.getPosY();
+
+        // check if position is valid
+        if (x < 0 || x >= MAP_SIZE || y < 0 || y >= MAP_SIZE) {
+            return;
+        }
+
+        // check if position is already occupied
+        if (mapHabit[x][y] != null) {
+            return;
+        }
+
         inhabitants.add(inhabitant);
+        mapHabit[x][y] = inhabitant;
         populationSize++;
     }
 
-    // method to spend resources from the village
+    /**
+     * Returns village's resources.
+     * 
+     * @return the resources currently stored in the village
+     */
+    public Resources getResources() {
+        Resources resources = new Resources();
+        for (ResourceType type : ResourceType.values()) {
+            resources.setAmount(type, resourceStorage.getResource(type));
+        }
+        return resources;
+    }
+
+    /**
+     * Spends resources from the village.
+     *
+     * @param cost the cost to be deducted
+     */
     public void spendResources(Resources cost) {
         if (cost == null) {
             return;
@@ -195,10 +281,6 @@ public class Village {
         for (ResourceType type : ResourceType.values()) {
             resourceStorage.sub(type, cost.getAmount(type));
         }
-    }
-
-    public ResourceStorage getResources() {
-        return resourceStorage;
     }
 
     /**
@@ -224,6 +306,43 @@ public class Village {
         return MAP_SIZE;
     }
 
+    /**
+     * Returns the building at the specified coordinates, or null if there is no
+     * building at that location.
+     * 
+     * @param x the x-coordinate of the building
+     * @param y the y-coordinate of the building
+     * @return the building at the specified coordinates, or null if there is no building
+     */
+    public Building getBuildingAt(int x, int y) {
+        if (x < 0 || x >= MAP_SIZE || y < 0 || y >= MAP_SIZE) {
+            return null;
+        }
+
+        return mapBuild[x][y];
+    }
+
+    /**
+     * Returns the inhabitant at the specified coordinates, or null if there is no
+     * inhabitant at that location.
+     *
+     * @param x the x-coordinate of the inhabitant
+     * @param y the y-coordinate of the inhabitant
+     * @return the inhabitant at the specified coordinates, or null if there is no inhabitant
+     */
+    public Inhabitant getInhabitantAt(int x, int y) {
+        if (x < 0 || x >= MAP_SIZE || y < 0 || y >= MAP_SIZE) {
+            return null;
+        }
+
+        return mapHabit[x][y];
+    }
+
+    /**
+     * Adds resources to the village's storage.
+     *
+     * @param toAdd the Resources object representing the resources to add
+     */
     public void addResources(Resources toAdd) {
         if (toAdd == null) {
             return;
@@ -234,6 +353,10 @@ public class Village {
         }
     }
 
+    /**
+     * Generates resources for the village by iterating through all inhabitants and
+     * getting their resource production if they are resource villagers.
+     */
     public void generateResources() {
         for (Inhabitant inhabitant : inhabitants) {
             if (inhabitant instanceof ResourceVillager) {

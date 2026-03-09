@@ -3,7 +3,7 @@ package game_elements;
 public class Building implements Damageable, Upgradeable {
 
     /** Attributes */
-    private String name;    //should have added this from the beginning
+    private String name; // should have added this from the beginning
     private int health;
     private int posX;
     private int posY;
@@ -15,9 +15,17 @@ public class Building implements Damageable, Upgradeable {
 
     /** Methods */
     // SETTERS
-    protected void setUpgradeCost(Resources upgradeCost){this.upgradeCost = upgradeCost;}
-    protected void setName(String name){this.name = name;}
-    protected void setMaxLevel(int maxLevel){this.maxLevel = maxLevel;}
+    protected void setUpgradeCost(Resources upgradeCost) {
+        this.upgradeCost = upgradeCost;
+    }
+
+    protected void setName(String name) {
+        this.name = name;
+    }
+
+    protected void setMaxLevel(int maxLevel) {
+        this.maxLevel = maxLevel;
+    }
 
     protected void setPosX(int posX) {
         this.posX = posX;
@@ -25,6 +33,11 @@ public class Building implements Damageable, Upgradeable {
 
     protected void setPosY(int posY) {
         this.posY = posY;
+    }
+
+    protected void setPosition(int x, int y) {
+        this.posX = x;
+        this.posY = y;
     }
 
     protected void setProductionCost(Resources productionCost) {
@@ -96,9 +109,9 @@ public class Building implements Damageable, Upgradeable {
     @Override
     public void upgrade() {
         if (level >= maxLevel) {
-            return; 
+            return;
         }
-        
+
         // Upgrade if not at max level
         level++;
         health += 100;
