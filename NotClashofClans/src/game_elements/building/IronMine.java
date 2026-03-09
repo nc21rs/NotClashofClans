@@ -13,6 +13,7 @@ public class IronMine extends ResourceBuilding {
         setMaxLevel(10);
         setDestroyed(false);
         setWorkerCapacity(3);
+        setShortName('I');
 
         //Build Cost
         Resources buildCost = new Resources();

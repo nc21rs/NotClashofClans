@@ -14,6 +14,7 @@ public class Farm extends ResourceBuilding {
         setMaxLevel(10);
         setDestroyed(false);
         setWorkerCapacity(1);
+        setShortName('F');
 
         //Build Cost
         Resources buildCost = new Resources();

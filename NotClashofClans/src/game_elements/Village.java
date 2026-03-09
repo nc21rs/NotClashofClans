@@ -1,5 +1,6 @@
 package game_elements;
 
+import game_elements.building.Cannon;
 import game_player_database.PlayerDataBase;
 
 import java.util.ArrayList;
@@ -95,9 +96,17 @@ public class Village {
         buildings = new ArrayList<>();
         inhabitants = new ArrayList<>();
         army = new Army();
+        //adding village hall
         villageHall = new VillageHall();
+        villageHall.setPosX(getMapSize()/2);
+        villageHall.setPosY(getMapSize()/2);
+        //adding cannon
+        Cannon cannon = new Cannon();
+        cannon.setPosX((getMapSize()/2)+1);
+        cannon.setPosY((getMapSize()/2)+1);
 
         addBuilding(villageHall);
+        addBuilding(cannon);
 
         /**
          * Load Player Data
@@ -197,8 +206,8 @@ public class Village {
         }
     }
 
-    public ResourceStorage getResources() {
-        return resourceStorage;
+    public int getResources(ResourceType resourceType) {
+        return resourceStorage.getResource(resourceType);
     }
 
     /**
