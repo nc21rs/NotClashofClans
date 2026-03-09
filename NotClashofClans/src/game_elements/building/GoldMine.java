@@ -13,6 +13,7 @@ public class GoldMine extends ResourceBuilding {
         setMaxLevel(10);
         setDestroyed(false);
         setWorkerCapacity(5);
+        setShortName('G');
 
         //Build Cost
         Resources buildCost = new Resources();

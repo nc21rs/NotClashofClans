@@ -1,9 +1,9 @@
-package game_elements;
 
 public class Building implements Damageable, Upgradeable {
 
     /** Attributes */
-    private String name; // should have added this from the beginning
+    private String name;
+    private char shortName = '?';
     private int health;
     private int posX;
     private int posY;
@@ -15,6 +15,10 @@ public class Building implements Damageable, Upgradeable {
 
     /** Methods */
     // SETTERS
+    protected void setShortName(char shortName) {
+        this.shortName = shortName;
+    }
+
     protected void setUpgradeCost(Resources upgradeCost) {
         this.upgradeCost = upgradeCost;
     }
@@ -57,6 +61,10 @@ public class Building implements Damageable, Upgradeable {
     }
 
     // GETTERS
+    public char getShortName() {
+        return shortName;
+    }
+
     public int getPosX() {
         return posX;
     }
@@ -69,8 +77,6 @@ public class Building implements Damageable, Upgradeable {
         return productionCost;
     }
 
-    // interface: Upgradable
-    // method to get the upgrade cost of a building
     public Resources getUpgradeCost() {
         return upgradeCost;
     }
@@ -79,7 +85,6 @@ public class Building implements Damageable, Upgradeable {
     public void takeDamage(int damage) {
         health -= damage;
 
-        // if health drops to 0, then building is destroyed
         if (health <= 0) {
             health = 0;
             destroyed = true;
@@ -112,7 +117,6 @@ public class Building implements Damageable, Upgradeable {
             return;
         }
 
-        // Upgrade if not at max level
         level++;
         health += 100;
     }

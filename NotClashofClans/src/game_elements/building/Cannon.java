@@ -14,6 +14,7 @@ public class Cannon extends DefenceBuilding {
         setLevel(1);
         setMaxLevel(10);
         setDestroyed(false);
+        setShortName('C');
 
         Resources buildCost = new Resources();
         buildCost.setAmount(ResourceType.WOOD,25);
