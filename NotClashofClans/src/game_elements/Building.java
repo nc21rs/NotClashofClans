@@ -13,10 +13,20 @@ public class Building implements Damageable, Upgradeable {
     private Resources productionCost;
     private Resources upgradeCost;
     private int maxLevel;
-
+    private boolean isUpgrading = false;    //defaults is no
+    private int upgradeTimeSeconds = 10;    //default is 10s
+    private final boolean ISBUILDING = true;      //simple fact, no setter
 
     /** Methods */
     // SETTERS
+    protected void setUpgradeTimeSeconds(int upgradeTimeSeconds) {
+        this.upgradeTimeSeconds = upgradeTimeSeconds;
+    }
+
+    public void setIsUpgrading(boolean upgrading) {
+        isUpgrading = upgrading;
+    }
+
     protected void setShortName(char shortName) {
         this.shortName = shortName;
     }
@@ -107,6 +117,7 @@ public class Building implements Damageable, Upgradeable {
     @Override
     public void upgrade() {
         if (level >= maxLevel) {
+            isUpgrading = false;
             return; 
         }
         
@@ -117,5 +128,20 @@ public class Building implements Damageable, Upgradeable {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean isUpgrading() {
+        return isUpgrading;
+    }
+
+    @Override
+    public int getUpgradeTimeSeconds() {
+        return upgradeTimeSeconds;
+    }
+
+    @Override
+    public boolean isBuilding() {
+        return ISBUILDING;
     }
 }

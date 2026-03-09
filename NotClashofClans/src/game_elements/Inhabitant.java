@@ -2,6 +2,8 @@ package game_elements;
 
 public class Inhabitant implements Damageable, Upgradeable, CanAttack {
     /** Attributes */
+    private String name;                    //should have added this from the beginning
+    private char shortName = '?';           //default is ?
     private int health;
     private int posX;
     private int posY;
@@ -13,6 +15,22 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
     private Resources upgradeCost;
     private Resources productionCost;
     private int maxLevel;
+    private boolean isUpgrading = false;    //defaults is no
+    private int upgradeTimeSeconds = 10;    //default is 10s
+    private final boolean ISBUILDING = false;     //simple fact, no setter
+
+
+    protected void setName(String name) {
+        this.name = name;
+    }
+
+    protected void setShortName(char shortName) {
+        this.shortName = shortName;
+    }
+
+    public void setIsUpgrading(boolean upgrading) {
+        isUpgrading = upgrading;
+    }
 
     protected void setOnField(boolean onField) {
         this.onField = onField;
@@ -121,10 +139,34 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
 
     @Override
     public void upgrade() {
+        isUpgrading = false;
         level++;
 
         // increase stats of inhabitant when it is upgraded
         health += 10;
         attackDamage += 5;
+    }
+    @Override
+    public String getName() {
+        return name;
+    }
+    @Override
+    public char getShortName() {
+        return shortName;
+    }
+
+    @Override
+    public int getUpgradeTimeSeconds() {
+        return upgradeTimeSeconds;
+    }
+
+    @Override
+    public boolean isUpgrading() {
+        return isUpgrading;
+    }
+
+    @Override
+    public boolean isBuilding() {
+        return ISBUILDING;
     }
 }

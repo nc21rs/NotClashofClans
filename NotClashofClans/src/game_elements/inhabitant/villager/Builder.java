@@ -13,6 +13,8 @@ public class Builder extends Worker {
         setDestroyed(false);
         setIdle(true);
         setMaxLevel(10);
+        setName("Builder");
+        setShortName('b');
 
         Resources productionCost = new Resources();
         productionCost.setAmount(ResourceType.FOOD, 10);

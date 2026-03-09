@@ -13,6 +13,8 @@ public class Archer extends ArmyUnit {
         setDestroyed(false);
         setOnField(false);
         setMaxLevel(10);
+        setName("Archer");
+        setShortName('a');
 
         // Set production cost
         Resources productionCost = new Resources();

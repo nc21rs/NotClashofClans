@@ -14,6 +14,8 @@ public class Farmer extends ResourceVillager {
         setProductionCapacity(10);
         setResourceProduced(ResourceType.FOOD);
         setMaxLevel(10);
+        setName("Farmer");
+        setShortName('f');
 
         Resources productionCost = new Resources();
         productionCost.setAmount(ResourceType.FOOD, 10);

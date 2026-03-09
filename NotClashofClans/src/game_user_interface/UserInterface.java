@@ -197,7 +197,7 @@ public class UserInterface {
      * Pair of helper methods to print any upgrade that is in progress
      */
     public void printTask(){
-        System.out.println("\n===== Upgrades: =====");
+        System.out.println("\n===== Processes: =====");
     }
     public void printTaskStrings(List<String[]> data) {
         for (String[] row : data) {

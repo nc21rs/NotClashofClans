@@ -13,6 +13,8 @@ public class Catapult extends ArmyUnit {
         setDestroyed(false);
         setOnField(false);
         setMaxLevel(10);
+        setName("Catapult");
+        setShortName('c');
 
         Resources productionCost = new Resources();
         productionCost.setAmount(ResourceType.WOOD, 40);

@@ -14,6 +14,8 @@ public class Miner extends ResourceVillager {
         setProductionCapacity(20);
         setResourceProduced(ResourceType.IRON);
         setMaxLevel(10);
+        setName("Miner");
+        setShortName('m');
 
         Resources productionCost = new Resources();
         productionCost.setAmount(ResourceType.FOOD, 10);

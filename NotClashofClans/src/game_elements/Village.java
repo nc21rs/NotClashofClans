@@ -1,6 +1,7 @@
 package game_elements;
 
 import game_elements.building.Cannon;
+import game_elements.building.Farm;
 import game_player_database.PlayerDataBase;
 
 import java.util.ArrayList;
@@ -125,6 +126,15 @@ public class Village {
         }
 
         this.resourceStorage = resourceStorage;
+    }
+
+    public Building placeFarm(int x, int y){
+        Farm farm = new Farm();
+        farm.setPosX(x);
+        farm.setPosY(y);
+
+        addBuilding(farm);  //yeah. You can build over buildings. But we call that a feature!
+        return farm;
     }
 
     public void setGuardTime(long guardTime) {

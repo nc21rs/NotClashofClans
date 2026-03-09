@@ -13,6 +13,8 @@ public class Soldiers extends ArmyUnit {
         setDestroyed(false);
         setOnField(false);
         setMaxLevel(10);
+        setName("Soldier");
+        setShortName('s');
 
         Resources productionCost = new Resources();
         productionCost.setAmount(ResourceType.FOOD, 20);

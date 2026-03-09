@@ -1,20 +1,26 @@
 package game_engine;
 
 import game_elements.*;
+import game_elements.building.Cannon;
+import game_elements.building.Farm;
 import game_user_interface.InvalidMenuChoiceException;
 import game_user_interface.UserInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class holds real-time upgrading processes of buildings that are to be completed at real time passes.
+ *
+ */
 class Task {
     long start;
     long duration;
     boolean done;
     Building target;
 
-    public Task(Building target, long durationSeconds) {
-        this.target = target;
+    public Task(Building building, long durationSeconds) {
+        this.target = building;
         start = System.currentTimeMillis();
         duration = durationSeconds * 1000;
         done = false;
@@ -35,11 +41,11 @@ public class GameEngine {
     private Village playerVillage;
     
     Village village;
-    ArrayList<Task> upgradeTask;
+    ArrayList<Task> upgradeTasks;
 
     /**
-     * Constructor. Initializes all required game parameters/processes
-     * user_interface, players
+     * Constructor. Initiates all processes related to "Not Clash of Clans"
+     * It starts the game
      */
     public GameEngine() {
         // initialize important game engine variables
@@ -48,7 +54,7 @@ public class GameEngine {
         userInterface = new UserInterface(20, 20);
         village = new Village();
         userInterface = new UserInterface(village.getMapSize(), village.getMapSize());  //sync village map size with interface
-        upgradeTask = new ArrayList<>();
+        upgradeTasks = new ArrayList<>();
         battleComputer = new BattleComputer();
         attackExplorer = new AttackExplorer();
 
@@ -57,6 +63,10 @@ public class GameEngine {
     }
 
     //method handles running the game
+
+    /**
+     * Method handles the prompting feature. To always prompt until user quits
+     */
     public void start(){
         //loop until user decides to quit
         while(running){
@@ -72,11 +82,15 @@ public class GameEngine {
                 ActionType actionType = userInterface.getUserAction();
                 action(actionType);
             } catch (InvalidMenuChoiceException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Method handles the user's actions.
+     * @param actionType list of possible actions allowed
+     */
     public void action(ActionType actionType) {
         switch (actionType) {
             case QUIT:
@@ -85,11 +99,14 @@ public class GameEngine {
                 break;
             case UPGRADE_BUILD:
                 //get x and y coords
-                int[] coords = userInterface.getCoords(village.getMapSize(),village.getMapSize());
-                requestUpgrade(coords[0],coords[1]);
+                int[] upgradeSelection = userInterface.getCoords(village.getMapSize(),village.getMapSize());
+                requestUpgradeBuilding(upgradeSelection[0],upgradeSelection[1]);
                 break;
             case BUILD:
                 // pick building, then get x and y
+                int[] buildSelection = userInterface.getCoords(village.getMapSize(),village.getMapSize());
+                village.placeFarm(buildSelection[0],buildSelection[1]);
+
             case TRAIN:
                 // prompt user with options to train troops
                 break;
@@ -97,6 +114,7 @@ public class GameEngine {
                 // prompt user to scout bases and perform attack
                 break;
             case PRODUCE:
+                // prompt user to train
 
             case EXPLORE:
 
@@ -107,27 +125,38 @@ public class GameEngine {
         }
     }
 
+    /**
+     * method checks all real-time processes. If completed, will apply game status changes.
+     */
     public void update() {
+        showProcesses();
         currentTime = System.currentTimeMillis();
-        java.util.Iterator<Task> iterator = upgradeTask.iterator(); // analyize list of running upgrades.
+        java.util.Iterator<Task> iterator = upgradeTasks.iterator(); // analyize list of running upgrades.
         while (iterator.hasNext()) { // for each task.
             Task task = iterator.next();
 
             if (task.isDone()) { // check if upgrade task done
                 task.target.upgrade(); // apply game upgrade.
-                iterator.remove(); // remove task from list. Via iterator. (By-passes problem of for-each removing
-                                   // live item from list)
+                iterator.remove(); // remove task from list. Via iterator. (By-passes problem of for-each removing a live item from list)
+                //userInterface.print("Upgrade Complete: "+task.target.getName());
             }
         }
     }
 
     // user wants to upgrade selected grid.
-    public void requestUpgrade(int x, int y) {
+    public void requestUpgradeBuilding(int x, int y) {
         Building building = village.mapBuild[x][y];
         if (canUpgrade(building, village)) { // is it upgrade-able?
-            village.spendResources(building.getUpgradeCost());
-            upgradeTask.add(new Task(building,60)); //Lets just assume all upgrades take 60seconds
-            userInterface.print("Upgrading: "+building.getName());
+            if(building.isUpgrading()){ //if its already upgrading
+                userInterface.print("Failed: Already upgrading"+building.getName());
+            } else {
+                village.spendResources(building.getUpgradeCost());
+                building.setIsUpgrading(true);
+                upgradeTasks.add(new Task(building,building.getUpgradeTimeSeconds()));
+                userInterface.print("New Task: Upgrade "+building.getName());
+            }
+        } else {
+            userInterface.print("Failed: Cannot Upgrade Building");
         }
         // otherwise, its not.
     }
@@ -170,20 +199,23 @@ public class GameEngine {
 
         // check if element or village is null
         if (element == null || village == null) {
+            userInterface.print("null Element or Village");
             return false;
         }
 
         // check if element is already at max level (denoted by Village Hall level)
         if (element.getLevel() >= element.getMaxLevel()) {
+            userInterface.print("Maximum Level");
             return false;
         }
 
         // get cost to upgrade element and check if player has enough resources
         Resources cost = element.getUpgradeCost();
 
-        if (!village.hasSufficientResources(cost)) {
-            return false;
-        }
+//        if (!village.hasSufficientResources(cost)) {
+//            userInterface.print("Insufficient Resources");
+//            return false;
+//        }
 
         return true;
     }
@@ -374,18 +406,29 @@ public class GameEngine {
      * Passses all upgrades information that are queued. Trying to keep all printing to UI class
      * Since Task obj is private, String containing task is being passed to userInterface class
      */
-    public void showTasks() {
+    public void showProcesses() {
         List<String[]> taskData = new ArrayList<>();
         userInterface.printTask();
         long now = System.currentTimeMillis();
-        for (Task t : upgradeTask) {
-            String name = t.target.getName();
-            String time = ((t.start + t.duration - now) / 1000) + "s";
-            taskData.add(new String[]{name, time});
+        if(upgradeTasks.isEmpty()){
+            userInterface.print("Nothing is upgrading");
+        } else {
+            for (Task t : upgradeTasks) {
+                String name = t.target.getName();
+                String time;
+                if(t.start + t.duration - now <=0)
+                    time = "done";
+                else {
+                    time = ((t.start + t.duration - now) / 1000) + "s";
+                    taskData.add(new String[]{name, time});
+                }
+            }
+
+            // Pass only the strings to the UI
+            userInterface.printTaskStrings(taskData);
         }
 
-        // Pass only the strings to the UI
-        userInterface.printTaskStrings(taskData);
+
     }
 
 }

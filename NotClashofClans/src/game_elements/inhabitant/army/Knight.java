@@ -13,6 +13,8 @@ public class Knight extends ArmyUnit {
         setDestroyed(false);
         setOnField(false);
         setMaxLevel(10);
+        setName("Knight");
+        setShortName('k');
 
         Resources productionCost = new Resources();
         productionCost.setAmount(ResourceType.FOOD, 30);

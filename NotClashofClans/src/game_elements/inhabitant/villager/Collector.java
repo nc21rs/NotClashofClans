@@ -14,6 +14,8 @@ public class Collector extends ResourceVillager {
         setProductionCapacity(20);
         setResourceProduced(ResourceType.WOOD);
         setMaxLevel(10);
+        setName("Collector");
+        setShortName('w');
 
         Resources productionCost = new Resources();
         productionCost.setAmount(ResourceType.FOOD, 15);
