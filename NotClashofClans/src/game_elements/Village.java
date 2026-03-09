@@ -135,6 +135,16 @@ public class Village {
         // TODO: load player data if exists, otherwise start with default village
     }
 
+    //simple build function
+    public Building placeFarm(int x, int y){
+        Farm farm = new Farm();
+        farm.setPosX(x);
+        farm.setPosY(y);
+
+        addBuilding(farm);  //yeah. You can build over buildings. But we call that a feature!
+        return farm;
+    }
+
     public void setGuardTime(long guardTime) {
         this.guardTime = guardTime;
     }

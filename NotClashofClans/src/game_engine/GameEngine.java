@@ -11,7 +11,6 @@ import java.util.List;
  * A task can be an upgrade, construction, or any other time-based action.
  */
 class Task {
-
     long start;
     long duration;
     boolean done;
@@ -58,7 +57,6 @@ public class GameEngine {
         userInterface = new UserInterface(20, 20);
         village = new Village();
         userInterface = new UserInterface(village.getMapSize(), village.getMapSize()); // sync village map size with
-                                                                                       // interface
         upgradeTask = new ArrayList<>();
         battleComputer = new BattleComputer();
         attackExplorer = new AttackExplorer();
@@ -83,7 +81,7 @@ public class GameEngine {
                 ActionType actionType = userInterface.getUserAction();
                 action(actionType);
             } catch (InvalidMenuChoiceException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
@@ -101,6 +99,8 @@ public class GameEngine {
                 break;
             case BUILD:
                 // pick building, then get x and y
+                int[] buildSelection = userInterface.getCoords(village.getMapSize(),village.getMapSize());
+                village.placeFarm(buildSelection[0],buildSelection[1]);
             case TRAIN:
                 // prompt user with options to train troops
                 break;
@@ -119,6 +119,7 @@ public class GameEngine {
     }
 
     public void update() {
+        showTasks();
         currentTime = System.currentTimeMillis();
         java.util.Iterator<Task> iterator = upgradeTask.iterator(); // analyize list of running upgrades.
         while (iterator.hasNext()) { // for each task.
@@ -126,8 +127,8 @@ public class GameEngine {
 
             if (task.isDone()) { // check if upgrade task done
                 task.target.upgrade(); // apply game upgrade.
-                iterator.remove(); // remove task from list. Via iterator. (By-passes problem of for-each removing
-                                   // live item from list)
+                iterator.remove(); // remove task from list. Via iterator. (By-passes problem of for-each removing live item from list)
+
             }
         }
     }
@@ -138,9 +139,12 @@ public class GameEngine {
         if (canUpgrade(building, village)) { // is it upgrade-able?
             village.spendResources(building.getUpgradeCost());
             upgradeTask.add(new Task(building, 60)); // Lets just assume all upgrades take 60seconds
-            userInterface.print("Upgrading: " + building.getName());
+            userInterface.print("New Task: Upgrade "+building.getName());
+        } else{
+            // otherwise, its not.
+            userInterface.print("Failed: Cannot Upgrade Building");
         }
-        // otherwise, its not.
+
     }
 
     /**
@@ -192,9 +196,9 @@ public class GameEngine {
         // get cost to upgrade element and check if player has enough resources
         Resources cost = element.getUpgradeCost();
 
-        if (!village.hasSufficientResources(cost)) {
-            return false;
-        }
+//        if (!village.hasSufficientResources(cost)) {
+//            return false;
+//        }
 
         return true;
     }
@@ -391,14 +395,23 @@ public class GameEngine {
         List<String[]> taskData = new ArrayList<>();
         userInterface.printTask();
         long now = System.currentTimeMillis();
-        for (Task t : upgradeTask) {
-            String name = t.target.getName();
-            String time = ((t.start + t.duration - now) / 1000) + "s";
-            taskData.add(new String[] { name, time });
-        }
+        if(upgradeTask.isEmpty()){
+            userInterface.print("Nothing is upgrading");
+        } else {
+            for (Task t : upgradeTask) {
+                String name = t.target.getName();
+                String time;
+                if(t.start + t.duration - now <=0)
+                    time = "done";
+                else {
+                    time = ((t.start + t.duration - now) / 1000) + "s";
+                    taskData.add(new String[]{name, time});
+                }
+            }
 
-        // Pass only the strings to the UI
-        userInterface.printTaskStrings(taskData);
+            // Pass only the strings to the UI
+            userInterface.printTaskStrings(taskData);
+        }
     }
 
 }
