@@ -29,6 +29,7 @@ class Task {
 
 }
 
+
 /**
  * This class represents the main game engine for the Not Clash of Clans game.
  * It controls the flow of the game, manages the game state, and handles user
@@ -70,7 +71,7 @@ public class GameEngine {
     public void start() {
         // loop until user decides to quit
         while (running) {
-            update(); // check any running tasks.
+            updateTasks(); // check any running tasks.
             // display info
             userInterface.displayResources(village);
             // display map
@@ -147,7 +148,10 @@ public class GameEngine {
         }
     }
 
-    public void update() {
+
+    
+
+    public void updateTasks() {
         showTasks();
         currentTime = System.currentTimeMillis();
         java.util.Iterator<Task> iterator = upgradeTask.iterator(); // analyize list of running upgrades.
