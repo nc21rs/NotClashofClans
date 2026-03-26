@@ -46,10 +46,10 @@ public class ResourceStorage {
     public void subtract(ResourceType resourceType, int cost) {
         int index = resourceType.getIndex();
         resources[index] -= cost;
-
-        if (resources[index] < 0) {
-            resources[index] = 0;
-        }
+        //Let it go into the negatives. For debug purposes.
+//        if (resources[index] < 0) {
+//            resources[index] = 0;
+//        }
     }
 
     /**

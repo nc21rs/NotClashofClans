@@ -13,6 +13,9 @@ public class VillageModel {
             (forseeibly, only the army will get elements removed after an attack?)
             Specially since the player can only perform one task at a time.
      */
+    //CONSTRUCTOR start THREAD
+    public VillageModel() {}
+
     //Interactable Variables
     private static final int MAP_SIZE = 25;
     private volatile ArrayList<Building> buildings; //list of all building elements
@@ -24,6 +27,11 @@ public class VillageModel {
     private volatile ArrayList<BackgroundTask> bgTasks;
     //Real Question, how should a completed upgrade be applied to the village?
     //todo: Have BackgroundTask handle such interaction. (Apply respective changes)
+    //Builders and Workers
+    private int availableBuilders;
+    private int availableWorkers;
+
+    //================================== Manages Village Variables MVC Pattern =======================================//
 
     //Getters & Setters
     protected Army getArmy(){return army;}
@@ -33,11 +41,16 @@ public class VillageModel {
     protected ArrayList<Building> getBuildings(){return buildings;}
     protected ArrayList<BackgroundTask> getBgTasks(){return bgTasks;}
     protected ArrayList<Inhabitant> getInhabitants(){return inhabitants;}
+    protected int getAvailableBuilders(){return availableBuilders;}
+    protected int getAvailableWorkers(){return availableWorkers;}
 
     protected void setArmy(Army army){this.army = army;}
-    protected void setIsGuard(boolean setGaurd){this.isGuard =setGaurd;}
+    protected void setIsGuard(boolean setGuard){this.isGuard =setGuard;}
     protected void setResources (ResourceStorage resources){this.resources = resources;}
     protected void setBgTasks(ArrayList<BackgroundTask> bgTasks){this.bgTasks = bgTasks;}
+    protected void setAvailableWorkers(int availableWorkers) {this.availableWorkers = availableWorkers;}
+    protected void setAvailableBuilders(int availableBuilders) {this.availableBuilders = availableBuilders;}
+
 
     protected void addBuilding(Building building){buildings.add(building);}
     protected void removeBuilding(Building building){buildings.remove(building);}

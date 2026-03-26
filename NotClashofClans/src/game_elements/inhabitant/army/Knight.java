@@ -10,6 +10,7 @@ import game_elements.Resources;
  */
 public class Knight extends ArmyUnit {
     public Knight() {
+        setName("Knight");
         setHealth(150);
         setAttackDamage(30);
         setRange(1);

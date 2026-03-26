@@ -10,6 +10,7 @@ import game_elements.Resources;
  */
 public class Soldiers extends ArmyUnit {
     public Soldiers() {
+        setName("Soldiers");
         setHealth(100);
         setAttackDamage(20);
         setRange(1);

@@ -10,6 +10,7 @@ import game_elements.Resources;
  */
 public class Catapult extends ArmyUnit {
     public Catapult() {
+        setName("Catapult");
         setHealth(100);
         setAttackDamage(50);
         setRange(4);

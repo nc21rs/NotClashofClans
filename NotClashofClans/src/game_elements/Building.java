@@ -67,7 +67,11 @@ public class Building implements Damageable, Upgradeable {
 
     // GETTERS
     public char getShortName() {
-        return shortName;
+        if(destroyed){
+            return '_';
+        } else {
+            return shortName;
+        }
     }
 
     public int getPosX() {
