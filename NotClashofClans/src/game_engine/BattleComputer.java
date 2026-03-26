@@ -5,40 +5,6 @@ import game_elements.*;
 import java.util.Random;
 
 /**
- * This class represents the result of a computed battle from the
- * BattleComputer.
- */
-class ComputedBattle {
-    private int attackScore;
-    private int defenceScore;
-    private boolean win;
-    private Resources loot;
-
-    public ComputedBattle(int attackScore, int defenceScore, boolean win, Resources loot) {
-        this.attackScore = attackScore;
-        this.defenceScore = defenceScore;
-        this.win = win;
-        this.loot = loot;
-    }
-
-    public int getAttackScore() {
-        return attackScore;
-    }
-
-    public int getDefenceScore() {
-        return defenceScore;
-    }
-
-    public boolean didWin() {
-        return win;
-    }
-
-    public Resources getLoot() {
-        return loot;
-    }
-}
-
-/**
  * This class is responsible for computing the outcome of a battle between an
  * attacking village and a defending village.
  */
@@ -131,7 +97,8 @@ public class BattleComputer {
         if (win) {
             for (ResourceType type : ResourceType.values()) {
                 int amount = dice.nextInt(village.getResourceAmount(type) + 1); // random amount between 0 and total
-                                                                                // getResources of that type in the village
+                                                                                // getResources of that type in the
+                                                                                // village
                 loot.setAmount(type, amount);
             }
         }

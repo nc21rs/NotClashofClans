@@ -12,33 +12,27 @@ import game_elements.inhabitant.villager.Miner;
 import java.util.InputMismatchException;
 
 public class InhabitantFactory {
-    public Inhabitant Factory(int[] type){
-        if(type[0]==0){//army
-            switch(type[1]){    //Soldiers for case 1, but will also be the safe default
-                case 1:
-                    return new Soldiers();
-                case 2:
-                    return new Archer();
-                case 3:
-                    return new Catapult();
-                case 4:
-                    return new Knight();
-                default:
-                    throw new InputMismatchException("unexpected type");
-            }
-        } else {//villagers
-            switch (type[1]){
-                case 1:
-                    return new Builder();
-                case 2:
-                    return new Collector();
-                case 3:
-                    return new Farmer();
-                case 4:
-                    return new Miner();
-                default:
-                    throw new InputMismatchException("unexpected type");
-            }
+
+    public Inhabitant createInhabitant(String type) {
+        switch (type.toUpperCase()) {
+            case "BUILDER":
+                return new Builder();
+            case "FARMER":
+                return new Farmer();
+            case "MINER":
+                return new Miner();
+            case "COLLECTOR":
+                return new Collector();
+            case "SOLDIER":
+                return new Soldiers();
+            case "ARCHER":
+                return new Archer();
+            case "KNIGHT":
+                return new Knight();
+            case "CATAPULT":
+                return new Catapult();
+            default:
+                throw new IllegalArgumentException("Invalid inhabitant type: " + type);
         }
     }
 }
