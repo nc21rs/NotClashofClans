@@ -1,5 +1,5 @@
 package game_elements;
-/**
+/*
  * Depreciated Class
  */
 
