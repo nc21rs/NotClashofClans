@@ -1,5 +1,8 @@
 package game_elements;
 
+import game_elements.inhabitant.villager.Builder;
+import game_elements.inhabitant.villager.Collector;
+
 import java.util.ArrayList;
 
 public class VillageControl {
@@ -8,12 +11,11 @@ public class VillageControl {
     public Building[][] buildingMap;
 
     //Java Version Dependency: Java19+ ExecutorService is autocloseable, can be used with try(with resources).
-    VillageControl(VillageModel village, VillageView view) {
+     public VillageControl(VillageModel village, VillageView view) {
         this.village = village;
         this.view = view;
         buildingMap = new Building[this.village.getMapSize()][this.village.getMapSize()];
-        setAvailableBuilders(4);    //Player gets only 4 maximum builders
-
+        setAvailableBuilders(2);    //Player by default start with 2 builders
 
     }
 
@@ -25,54 +27,63 @@ public class VillageControl {
     protected ArrayList<Building> getBuildings(){return village.getBuildings();}
     protected ArrayList<BackgroundTask> getBgTasks(){return village.getBgTasks();}
     protected ArrayList<Inhabitant> getInhabitants(){return village.getInhabitants();}
-    protected int getAvailableWorkers(){return village.getAvailableWorkers();}
-    protected int getAvailableBuilders(){return village.getAvailableBuilders();}
+    protected int getAvailableWorkers(){return village.getNumWorkers();}
+    protected int getAvailableBuilders(){return village.getNumBuilders();}
+    protected int getMaxWorker(){return village.getMaxWorker();}
+    protected int getMaxBuilder(){return village.getMaxBuilder();}
+    protected int getMaxBuilding(){return village.getMaxBuilding();}
+    protected int getNumBuilding(){return village.getNumBuilding();}
 
     protected void setArmy(Army army){village.setArmy(army);}
     protected void setIsGuard(boolean setGaurd){village.setIsGuard(setGaurd);}
+    protected void setMaxWorker(int maxWorker){village.setMaxWorker(maxWorker);}
+    protected void setMaxBuilder(int maxBuilder){village.setMaxBuilder(maxBuilder);}
+    protected void setNumBuilding(int numBuilding){village.setNumBuilding(numBuilding);}
+    protected void setMaxBuilding(int maxBuilding){village.setMaxBuilding(maxBuilding);}
     protected void setResources (ResourceStorage resources){village.setResources(resources);}
     protected void setBgTasks(ArrayList<BackgroundTask> bgTasks){village.setBgTasks(bgTasks);}
-    protected void setAvailableWorkers(int availableWorkers){village.setAvailableWorkers(availableWorkers);}
-    protected void setAvailableBuilders(int availableBuilders){village.setAvailableBuilders(availableBuilders);}
+    protected void setAvailableWorkers(int availableWorkers){village.setNumWorkers(availableWorkers);}
+    protected void setAvailableBuilders(int availableBuilders){village.setNumBuilders(availableBuilders);}
 
     protected void addBuilding(Building building){village.getBuildings().add(building);}
     protected void removeBuilding(Building building){village.getBuildings().remove(building);}
     protected void addInhabitant(Inhabitant inhabitant){village.getInhabitants().add(inhabitant);}
     protected void removeInhabitant(Inhabitant inhabitant){village.getInhabitants().remove(inhabitant);}
 
+//    protected void incrementBuilder(){setAvailableBuilders(getAvailableBuilders()+1);}
+//    protected void decrementBuilder(){setAvailableBuilders(getAvailableBuilders()-1);}
+//    protected void incrementWorker(){setAvailableWorkers(getAvailableWorkers()+1);}
+//    protected void decrementWorker(){setAvailableWorkers(getAvailableWorkers()-1);}
 
     //============================ Helper Methods ====================================================================//
-
-    //Requests (Game Engine will make queries to Village to do stuff)
-
+    //Queries that the game engine can request Village to perform.
     /**
      * Function attempts to build provided structure at location
      * @param building structure in question to build
-     * @param x coordinate
-     * @param y coordinate
      * @throws NoBuilderAvaliable error should no builders be available
      * @throws NotEnoughResources error should a village lack the resources
      * @throws BuildingInTheWay error should a building is already in the way
      */
-    public void makeBuilding(Building building, int x, int y) throws NoBuilderAvaliable, NotEnoughResources, BuildingInTheWay {
-        if (village.getAvailableBuilders()<=0) {  //check if there is any available builders
+    public void placeBuilding(Building building) throws NoBuilderAvaliable, NotEnoughResources, BuildingInTheWay, MaxBuilding {
+        if (this.getAvailableBuilders()<=0) {  //check if there is any available builders
             throw new NoBuilderAvaliable();
         } else if(!building.getProductionCost().checkAmount()){ //check if village has the resources to build
             throw new NotEnoughResources();
-        } else if(buildingMap[x][y] != null){   //check if there is already a structure built at given location
-            throw new BuildingInTheWay(buildingMap[x][y].getName());    //omg im soo smart!
+        } else if(buildingMap[building.getPosX()][building.getPosY()] != null){   //check if there is already a structure built at given location
+            throw new BuildingInTheWay(buildingMap[building.getPosX()][building.getPosY()].getName());    //omg im soo smart!
+        } else if (this.getNumBuilding()>=this.getMaxBuilding()) {    //at building capacity?
+            throw new MaxBuilding();
         } else {
             //subtract resources
             Resources cost = building.getProductionCost();
-            village.getResources().subtract(ResourceType.FOOD, cost.getAmount(ResourceType.FOOD));
-            village.getResources().subtract(ResourceType.WOOD, cost.getAmount(ResourceType.WOOD));
-            village.getResources().subtract(ResourceType.IRON, cost.getAmount(ResourceType.IRON));
-            village.getResources().subtract(ResourceType.GOLD,cost.getAmount(ResourceType.GOLD));
-            //add building
-            village.addBuilding(building);
+            subtractCost(cost);
+
+            this.addBuilding(building); //Add building to list
+            buildingMap[building.getPosX()][building.getPosY()] = building;
             building.setDestroyed(true);    //when constructed, set destroyed to false.
+            this.setNumBuilding(this.getNumBuilding()+1); //increment number of building
             //queue task
-            village.getBgTasks().add(new BackgroundTask(building,10));
+            this.getBgTasks().add(new BackgroundTask(building,10,false));
         }
     }
 
@@ -85,30 +96,32 @@ public class VillageControl {
      * @throws MaxLevel error should the building already maxed out
      */
     public void upgradeBuilding(int x, int y) throws NoBuilderAvaliable, NothingToUpgrade, MaxLevel {
-        if(village.getAvailableBuilders()<=0) {
+        if(this.getAvailableBuilders()<=0) {   //builders avaliable?
             throw new NoBuilderAvaliable();
-        } else if (buildingMap[x][y] == null){
+        } else if (buildingMap[x][y] == null){  //selected tile is empty?
             throw new NothingToUpgrade();
-        } else { //build exists
+        } else { //otherwise building exists
             Building building = buildingMap[x][y];
             if(building.getLevel() >= building.getMaxLevel()){ //check if max level
                 throw new MaxLevel(building.getName());
             } else { //otherwise upgrade!
                 Resources cost = building.getUpgradeCost();
-                village.getResources().subtract(ResourceType.FOOD, cost.getAmount(ResourceType.FOOD));
-                village.getResources().subtract(ResourceType.WOOD, cost.getAmount(ResourceType.WOOD));
-                village.getResources().subtract(ResourceType.IRON, cost.getAmount(ResourceType.IRON));
-                village.getResources().subtract(ResourceType.GOLD,cost.getAmount(ResourceType.GOLD));
+                subtractCost(cost);
                 //set to upgrading
                 building.setDestroyed(true);
                 //queue task
-                village.getBgTasks().add(new BackgroundTask(building,10));
+                this.getBgTasks().add(new BackgroundTask(building,10,true));
             }
         }
     }
 
-
-    public void upgradeInhabitants(ArmyUnit armyUnit) throws NotEnoughResources, MaxLevel {
+    /**
+     * Function attempts to upgrade selected unit
+     * @param armyUnit the village's armyUnit type
+     * @throws NotEnoughResources error should there not be enough resources
+     * @throws MaxLevel error should maxed level
+     */
+    public void upgradeArmyUnit(ArmyUnit armyUnit) throws NotEnoughResources, MaxLevel {
         if(!armyUnit.getProductionCost().checkAmount()){
             throw new NotEnoughResources();
         } else if(armyUnit.getLevel() >= armyUnit.getMaxLevel()){
@@ -116,31 +129,73 @@ public class VillageControl {
         } else {
             //subtract
             Resources cost = armyUnit.getProductionCost();
-            village.getResources().subtract(ResourceType.FOOD, cost.getAmount(ResourceType.FOOD));
-            village.getResources().subtract(ResourceType.WOOD, cost.getAmount(ResourceType.WOOD));
-            village.getResources().subtract(ResourceType.IRON, cost.getAmount(ResourceType.IRON));
-            village.getResources().subtract(ResourceType.GOLD,cost.getAmount(ResourceType.GOLD));
+            subtractCost(cost);
             //queue task
-            village.getBgTasks().add(new BackgroundTask<>(armyUnit,10));
+            this.getBgTasks().add(new BackgroundTask<>(armyUnit,10,true));
         }
     }
+
+    /**
+     * Function attempts to train new army units
+     * @param armyUnit army unit type
+     * @throws NotEnoughResources error should there not be enough resources
+     */
     public void trainArmy(ArmyUnit armyUnit) throws NotEnoughResources {
         if (!armyUnit.getProductionCost().checkAmount()) {
             throw new NotEnoughResources();
         } else {
             //subtract cost
             Resources cost = armyUnit.getProductionCost();
-            village.getResources().subtract(ResourceType.FOOD, cost.getAmount(ResourceType.FOOD));
-            village.getResources().subtract(ResourceType.WOOD, cost.getAmount(ResourceType.WOOD));
-            village.getResources().subtract(ResourceType.IRON, cost.getAmount(ResourceType.IRON));
-            village.getResources().subtract(ResourceType.GOLD,cost.getAmount(ResourceType.GOLD));
-            //add unit to army
-            village.getArmy().addUnit(armyUnit);
+            subtractCost(cost);
+            //queue task
+            this.getBgTasks().add(new BackgroundTask(armyUnit,10,false));
         }
     }
-    //todo implement
-    public void trainWorkers(){}
 
+    /**
+     * Function attempts to train new builders
+     * @param builder the reference to the inhabitant
+     * @throws NotEnoughResources error should there not be enough resources
+     * @throws MaxLevel
+     */
+    public void trainBuilder(Builder builder) throws NotEnoughResources, MaxBuilder {
+        if (!builder.getProductionCost().checkAmount()) {
+            throw new NotEnoughResources();
+        } else if (this.getAvailableBuilders() >= this.getMaxBuilder()) {
+            throw new MaxBuilder();
+        } else {
+            //subtract costs
+            Resources cost = builder.getProductionCost();
+            subtractCost(cost);
+            //queue task
+            this.getBgTasks().add(new BackgroundTask(builder,10,true));
+        }
+    }
+
+    /**
+     * Function attempts to train new Villager Collectors
+     * @param collector
+     * @throws NotEnoughResources error should there not be enough resources
+     * @throws MaxWorker error should limit is reached
+     */
+    public void trainWorker(Collector collector) throws NotEnoughResources, MaxLevel, MaxWorker {
+        if(!collector.getProductionCost().checkAmount()) {
+            throw new NotEnoughResources();
+        } else{
+            Resources cost = collector.getProductionCost();
+            subtractCost(cost);
+            this.getBgTasks().add(new BackgroundTask(collector,10,true));
+        }
+    }
+
+
+
+    private void subtractCost(Resources cost) {
+        this.getResources().subtract(ResourceType.FOOD, cost.getAmount(ResourceType.FOOD));
+        this.getResources().subtract(ResourceType.WOOD, cost.getAmount(ResourceType.WOOD));
+        this.getResources().subtract(ResourceType.IRON, cost.getAmount(ResourceType.IRON));
+        this.getResources().subtract(ResourceType.GOLD,cost.getAmount(ResourceType.GOLD));
+    }
 
 }
 
@@ -161,6 +216,15 @@ class NothingToUpgrade extends Exception {
 }
 class MaxLevel extends Exception {
     public MaxLevel(String target) {super("Error: "+target+" at Max Level");}
+}
+class MaxBuilding extends Exception {
+    public MaxBuilding() {super("Error: Building Limit");}
+}
+class MaxWorker extends Exception {
+    public MaxWorker() {super("Error: Worker Limit");}
+}
+class MaxBuilder extends Exception {
+    public MaxBuilder() {super("Error: Builder Limit");}
 }
 //================================== Threading =======================================================================//
 //class TaskThread extends Thread {

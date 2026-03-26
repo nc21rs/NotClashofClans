@@ -5,15 +5,6 @@ package game_elements;
  * class.
  */
 public class ArmyUnit extends Inhabitant {
-    private String name;
-
-    protected void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     @Override
     protected void setHealth(int health) {

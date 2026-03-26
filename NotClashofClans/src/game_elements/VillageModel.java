@@ -15,6 +15,10 @@ public class VillageModel {
      */
     //CONSTRUCTOR start THREAD
     public VillageModel() {}
+    //Limits
+    private int maxBuilding;
+    private int maxWorker;
+    private int maxBuilder;
 
     //Interactable Variables
     private static final int MAP_SIZE = 25;
@@ -25,37 +29,46 @@ public class VillageModel {
     //Real-time variables
     private volatile boolean isGuard;   //can the base be attacked?
     private volatile ArrayList<BackgroundTask> bgTasks;
-    //Real Question, how should a completed upgrade be applied to the village?
-    //todo: Have BackgroundTask handle such interaction. (Apply respective changes)
-    //Builders and Workers
-    private int availableBuilders;
-    private int availableWorkers;
 
+    //Builders and Workers
+    private int numWorkers;
+    private int numBuilding;
+    private int numBuilders;
     //================================== Manages Village Variables MVC Pattern =======================================//
 
     //Getters & Setters
     protected Army getArmy(){return army;}
-    protected boolean getGuard(){return isGuard;}
     protected int getMapSize(){return MAP_SIZE;}
+    protected boolean getGuard(){return isGuard;}
+    protected int getMaxWorker(){return maxWorker;}
+    protected int getNumWorkers(){return numWorkers;}
+    protected int getMaxBuilder(){return maxBuilder;}
+    protected int getMaxBuilding(){return maxBuilding;}
+    protected int getNumBuilders(){return numBuilders;}
+    protected int getNumBuilding(){return numBuilding;}
     protected ResourceStorage getResources(){return resources;}
     protected ArrayList<Building> getBuildings(){return buildings;}
     protected ArrayList<BackgroundTask> getBgTasks(){return bgTasks;}
     protected ArrayList<Inhabitant> getInhabitants(){return inhabitants;}
-    protected int getAvailableBuilders(){return availableBuilders;}
-    protected int getAvailableWorkers(){return availableWorkers;}
 
     protected void setArmy(Army army){this.army = army;}
     protected void setIsGuard(boolean setGuard){this.isGuard =setGuard;}
+    protected void setMaxWorker(int maxWorker){this.maxWorker = maxWorker;}
+    protected void setMaxBuilder(int maxBuilder){this.maxBuilder = maxBuilder;}
+    protected void setNumWorkers(int numWorkers) {this.numWorkers = numWorkers;}
+    protected void setNumBuilding(int numBuilding){this.numBuilding=numBuilding;}
+    protected void setMaxBuilding(int maxBuilding){this.maxBuilding = maxBuilding;}
+    protected void setNumBuilders(int numBuilders) {this.numBuilders = numBuilders;}
     protected void setResources (ResourceStorage resources){this.resources = resources;}
     protected void setBgTasks(ArrayList<BackgroundTask> bgTasks){this.bgTasks = bgTasks;}
-    protected void setAvailableWorkers(int availableWorkers) {this.availableWorkers = availableWorkers;}
-    protected void setAvailableBuilders(int availableBuilders) {this.availableBuilders = availableBuilders;}
 
 
     protected void addBuilding(Building building){buildings.add(building);}
     protected void removeBuilding(Building building){buildings.remove(building);}
     protected void addInhabitant(Inhabitant inhabitant){inhabitants.add(inhabitant);}
     protected void removeInhabitant(Inhabitant inhabitant){inhabitants.remove(inhabitant);}
+
+    public void incrementBuilders(){numBuilders++;}
     //Background Tasks are handled in real-time requiring different processes
 //    protected void addBackgroundTask(BackgroundTask backgroundTask){bgTasks.add(backgroundTask);}
 //    protected void removeBackgroundTask(BackgroundTask backgroundTask){bgTasks.remove(backgroundTask);}

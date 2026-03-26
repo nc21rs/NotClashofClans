@@ -11,6 +11,7 @@ import game_elements.Resources;
  */
 public class Collector extends ResourceVillager {
     public Collector(){
+        setName("Collector");
         setHealth(70);
         setAttackDamage(5);
         setRange(1);

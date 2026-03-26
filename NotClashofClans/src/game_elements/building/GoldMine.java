@@ -16,7 +16,8 @@ public class GoldMine extends ResourceBuilding {
         setLevel(1);
         setMaxLevel(10);
         setDestroyed(false);
-        setWorkerCapacity(5);
+        setMaxWorkers(3);   //max is 3
+        setNumWorkers(0);   //starts with 0
         setShortName('G');
 
         // Build Cost
