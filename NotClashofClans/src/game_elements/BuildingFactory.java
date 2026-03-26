@@ -1,29 +1,41 @@
 package game_elements;
 
 import game_elements.building.*;
-
 import java.util.InputMismatchException;
 
-public class BuildingFactory extends Building {
+public class BuildingFactory {
 
-    public Building createBuilding(String type){
+    public Building createBuilding(String type, int x_cord, int y_cord) {
+        Building building;
+
         switch (type) {
             case "TOWNHALL":
-                return new TownHall();
+                building = new TownHall();
+                break;
             case "CANNON":
-                return new Cannon();
+                building = new Cannon();
+                break;
             case "ARCHERTOWER":
-                return new ArcherTowers();
+                building = new ArcherTowers();
+                break;
             case "FARM":
-                return new Farm();
+                building = new Farm();
+                break;
             case "LUMBERMILL":
-                return new LumberMill();
+                building = new LumberMill();
+                break;
             case "IRONMINE":
-                return new IronMine();
+                building = new IronMine();
+                break;
             case "GOLDMINE":
-                return new GoldMine();
+                building = new GoldMine();
+                break;
             default:
                 throw new InputMismatchException("Invalid building type: " + type);
         }
+
+        building.setPosX(x_cord);
+        building.setPosY(y_cord);
+        return building;
     }
 }

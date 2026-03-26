@@ -43,6 +43,8 @@ public class GameEngine {
     private final AttackExplorer attackExplorer;
     private UserInterface userInterface;
     private Village exploredVillage;
+    private BuildingFactory buildingFactory;
+    private InhabitantFactory inhabitantFactory;
 
     Village village;
     ArrayList<Task> upgradeTask;
@@ -62,6 +64,8 @@ public class GameEngine {
         battleComputer = new BattleComputer();
         attackExplorer = new AttackExplorer();
         exploredVillage = attackExplorer.reRollCandidate();
+        buildingFactory = new BuildingFactory();
+        inhabitantFactory = new InhabitantFactory();
 
         // run game
         start();
@@ -102,9 +106,22 @@ public class GameEngine {
                 break;
 
             case BUILD:
-                // pick building, then get x and y
-                int[] buildSelection = userInterface.getCoords(village.getMapSize(), village.getMapSize());
-                village.placeFarm(buildSelection[0], buildSelection[1]);
+                // get choice of building
+                String buildingChoice = userInterface.getBuildingChoice();
+
+                // get x and y coords
+                int[] coordinates = userInterface.getCoords(village.getMapSize(), village.getMapSize());
+
+                Building building = buildingFactory.createBuilding(buildingChoice, coordinates[0], coordinates[1]);
+
+                if (canBuild(building, village)) {
+                    build(building, village);
+                    userInterface.print("Building " + building.getName() + " at (" + building.getPosX() + ", "
+                            + building.getPosY() + ")");
+                } else {
+                    userInterface.print("Failed: Cannot Build " + building.getName());
+                }
+
                 break;
 
             case TRAIN:
