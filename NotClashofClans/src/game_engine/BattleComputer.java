@@ -131,7 +131,7 @@ public class BattleComputer {
         if (win) {
             for (ResourceType type : ResourceType.values()) {
                 int amount = dice.nextInt(village.getResourceAmount(type) + 1); // random amount between 0 and total
-                                                                                // resources of that type in the village
+                                                                                // getResources of that type in the village
                 loot.setAmount(type, amount);
             }
         }

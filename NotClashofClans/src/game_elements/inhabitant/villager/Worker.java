@@ -1,4 +1,6 @@
-package game_elements;
+package game_elements.inhabitant.villager;
+
+import game_elements.Inhabitant;
 
 /**
  * This class represents a worker in the game. It extends the Inhabitant class

@@ -227,7 +227,7 @@ public class GameEngine {
             return false;
         }
 
-        // get cost to upgrade element and check if player has enough resources
+        // get cost to upgrade element and check if player has enough getResources
         Resources cost = element.getUpgradeCost();
 
         // if (!village.hasSufficientResources(cost)) {
@@ -250,7 +250,7 @@ public class GameEngine {
             return false;
         }
 
-        // get cost to build building and check if player has enough resources
+        // get cost to build building and check if player has enough getResources
         Resources cost = building.getProductionCost();
         if (!village.hasSufficientResources(cost)) {
             return false;
@@ -287,7 +287,7 @@ public class GameEngine {
             return false;
         }
 
-        // check if village has enough resources to train inhabitant
+        // check if village has enough getResources to train inhabitant
         Resources cost = inhabitant.getProductionCost();
 
         if (!village.hasSufficientResources(cost)) {
@@ -357,7 +357,7 @@ public class GameEngine {
      * Returns an ActionTimer object representing the time required to build a
      * building
      * 
-     * @param element the Building
+//     * @param element the Building
      * @param village the Village where the building is being constructed
      * @return an ActionTimer object representing the time required to build the
      *         building
@@ -377,7 +377,7 @@ public class GameEngine {
      * Returns an ActionTimer object representing the time required to train an
      * inhabitant
      * 
-     * @param element the Inhabitant element
+//     * @param element the Inhabitant element
      * @param village the Village where the inhabitant is being trained
      * @return an ActionTimer object representing the time required to train the
      *         inhabitant

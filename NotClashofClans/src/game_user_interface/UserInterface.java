@@ -140,9 +140,9 @@ public class UserInterface {
     }
 
     /**
-     * Method to display the village resources.
+     * Method to display the village getResources.
      *
-     * @param village the Village whose resources will be displayed
+     * @param village the Village whose getResources will be displayed
      */
     public void displayResources(Village village) {
         if (village == null) {
@@ -156,7 +156,7 @@ public class UserInterface {
         System.out.printf("%d Wood\n", village.getResourceAmount(ResourceType.WOOD));
         System.out.printf("%d Iron\n", village.getResourceAmount(ResourceType.IRON));
         System.out.printf("%d Gold\n", village.getResourceAmount(ResourceType.GOLD));
-        System.out.printf("%d Population\n", village.getResourceAmount(ResourceType.POPULATION));
+//        System.out.printf("%d Population\n", village.getResourceAmount(ResourceType.POPULATION));
         System.out.println("=====================\n");
     }
 

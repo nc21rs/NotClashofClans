@@ -19,14 +19,14 @@ class VillageGenerator {
     }
 
     /**
-     * Generates a random village with random resources, buildings, and inhabitants.
+     * Generates a random village with random getResources, buildings, and inhabitants.
      * 
      * @return a randomly generated Village
      */
     public Village generateVillage() {
         Village generatedVillage = new Village();
 
-        // Generate resources for generated village
+        // Generate getResources for generated village
         // random number for each resource
         Resources randomResources = new Resources();
         for (ResourceType type : ResourceType.values()) {

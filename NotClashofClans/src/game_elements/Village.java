@@ -1,4 +1,7 @@
 package game_elements;
+/**
+ * Depreciated Class
+ */
 
 import game_elements.building.*;
 import game_elements.inhabitant.villager.*;
@@ -7,78 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represent a village's resource storage.
- * It perform operations on the resources.
- */
-class ResourceStorage {
-    private int[] resources;
-    private int[] capacity;
-
-    public ResourceStorage() {
-        resources = new int[ResourceType.values().length];
-        capacity = new int[ResourceType.values().length];
-
-        for (int i = 0; i < resources.length; i++) {
-            resources[i] = 0;
-            capacity[i] = 100;
-        }
-    }
-
-    /**
-     * Adds a specific quantity of a resource type to the player's storage.
-     *
-     * @param resourceType the type of resource to add
-     * @param qty the quantity of the resource to add
-     */
-    public void add(ResourceType resourceType, int qty) {
-        int index = resourceType.getIndex();
-        resources[index] += qty;
-
-        if (resources[index] > capacity[index]) {
-            resources[index] = capacity[index];
-        }
-    }
-
-    /**
-     * Subtracts a specific quantity of a resource type from the player's storage.
-     *
-     * @param resourceType the type of resource to subtract
-     * @param qty the quantity of the resource to subtract
-     */
-    public void sub(ResourceType resourceType, int qty) {
-        int index = resourceType.getIndex();
-        resources[index] -= qty;
-
-        if (resources[index] < 0) {
-            resources[index] = 0;
-        }
-    }
-
-    /**
-     * Returns the capacity of a specific resource type in the player's storage.
-     *
-     * @param resourceType the type of resource to check
-     * @return the capacity of the specified resource type
-     */
-    public int getCapacity(ResourceType resourceType) {
-        return capacity[resourceType.getIndex()];
-    }
-
-    /**
-     * Returns the amount of a specific resource type that the player has.
-     *
-     * @param resourceType the type of resource to check
-     * @return the amount of the specified resource type
-     */
-    public int getResource(ResourceType resourceType) {
-        return resources[resourceType.getIndex()];
-    }
-}
-
-/**
  * This class represents the player's village in the game. It contains
  * information about all elements of the village (buildings, inhabitants,
- * resources, etc.) and methods to manipulate them.
+ * getResources, etc.) and methods to manipulate them.
  */
 public class Village {
     private static final int MAP_SIZE = 11;
@@ -94,7 +28,7 @@ public class Village {
     private List<Building> buildings;
     private List<Inhabitant> inhabitants;
     private Army army;
-    private VillageHall villageHall;
+    private TownHall townHall;
 
     public Village() {
         mapBuild = new Building[MAP_SIZE][MAP_SIZE];
@@ -108,8 +42,8 @@ public class Village {
         inhabitants = new ArrayList<>();
         army = new Army();
 
-        villageHall = new VillageHall();
-        villageHall.setPosition(5, 5);
+        townHall = new TownHall();
+        townHall.setPosition(5, 5);
 
         Cannon cannon = new Cannon();
         cannon.setPosition(6, 6);
@@ -119,7 +53,7 @@ public class Village {
         building1.setPosition(4, 5);
         building2.setPosition(6, 5);
 
-        addBuilding(villageHall);
+        addBuilding(townHall);
         addBuilding(cannon);
         addBuilding(building1);
         addBuilding(building2);
@@ -170,11 +104,11 @@ public class Village {
     }
 
     public int getHallLevel() {
-        return villageHall.getLevel();
+        return townHall.getLevel();
     }
 
-    public VillageHall getVillageHall() {
-        return villageHall;
+    public TownHall getVillageHall() {
+        return townHall;
     }
 
     public List<Building> getBuildings() {
@@ -241,9 +175,9 @@ public class Village {
     }
 
     /**
-     * Returns village's resources.
+     * Returns village's getResources.
      *
-     * @return the resources currently stored in the village
+     * @return the getResources currently stored in the village
      */
     public Resources getResources() {
         Resources resources = new Resources();
@@ -254,7 +188,7 @@ public class Village {
     }
 
     /**
-     * Spends resources from the village.
+     * Spends getResources from the village.
      *
      * @param cost the cost to be deducted
      */
@@ -264,15 +198,15 @@ public class Village {
         }
 
         for (ResourceType type : ResourceType.values()) {
-            resourceStorage.sub(type, cost.getAmount(type));
+            resourceStorage.subtract(type, cost.getAmount(type));
         }
     }
 
     /**
-     * Checks if the village has sufficient resources for a cost.
+     * Checks if the village has sufficient getResources for a cost.
      *
      * @param cost the Resources object representing the cost
-     * @return true if the village has enough resources, false otherwise
+     * @return true if the village has enough getResources, false otherwise
      */
     public boolean hasSufficientResources(Resources cost) {
         if (cost == null) {
@@ -324,9 +258,9 @@ public class Village {
     }
 
     /**
-     * Adds resources to the village's storage.
+     * Adds getResources to the village's storage.
      *
-     * @param toAdd the Resources object representing the resources to add
+     * @param toAdd the Resources object representing the getResources to add
      */
     public void addResources(Resources toAdd) {
         if (toAdd == null) {
@@ -339,7 +273,7 @@ public class Village {
     }
 
     /**
-     * Generates resources for the village by iterating through all inhabitants and
+     * Generates getResources for the village by iterating through all inhabitants and
      * getting their resource production if they are resource villagers.
      */
     public void generateResources() {

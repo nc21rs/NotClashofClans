@@ -1,7 +1,7 @@
 package game_elements;
 
 /**
- * Class stores the quantity of all resources with an Array.
+ * Class stores the quantity of all getResources with an Array.
  * The index of each resource is handled by ResourceType.
  * This class is what sets the costs for each Building/Inhabitant/Upgrade
  */
@@ -27,11 +27,11 @@ public class Resources {
     }
 
     /*
-     * Checks if the current resources are sufficient to cover the given cost.
+     * Checks if the current getResources are sufficient to cover the given cost.
      *
-     * @param cost The resources required.
+     * @param cost The getResources required.
      * 
-     * @return true if there are enough resources, false otherwise.
+     * @return true if there are enough getResources, false otherwise.
      */
     public boolean checkAmount(Resources cost) {
         if (cost == null) {
@@ -40,18 +40,18 @@ public class Resources {
 
         for (ResourceType resourceType : ResourceType.values()) {
 
-            // check if cost is bigger than the current amount of resources
+            // check if cost is bigger than the current amount of getResources
             if (this.getAmount(resourceType) < cost.getAmount(resourceType)) {
-                return false; // Not enough resources
+                return false; // Not enough getResources
             }
         }
-        return true; // enough resources
+        return true; // enough getResources
     }
 
     /*
-     * Method to remove resources from current resources
+     * Method to remove getResources from current getResources
      *
-     * @param toRemove resources to be removed
+     * @param toRemove getResources to be removed
      */
     public void removeResources(Resources toRemove) {
         if (toRemove == null) {
@@ -63,7 +63,7 @@ public class Resources {
             this.amounts[index] = this.amounts[index] - toRemove.getAmount(resourceType);
 
             // even though we check if we can afford the cost, we will make sure no negative
-            // resources are stored.
+            // getResources are stored.
             // Just in case
             if (this.amounts[index] < 0) {
                 this.amounts[index] = 0;
@@ -72,9 +72,9 @@ public class Resources {
     }
 
     /*
-     * Method to add resources to current resources
+     * Method to add getResources to current getResources
      *
-     * @param toAdd resources to be added
+     * @param toAdd getResources to be added
      */
     public void addResources(Resources toAdd) {
         if (toAdd == null) {

@@ -6,7 +6,7 @@ import game_elements.Resources;
 
 /**
  * This class represents the Miner villager in the game. It extends the
- * ResourceVillager class and is responsible for mining iron resources for the
+ * ResourceVillager class and is responsible for mining iron getResources for the
  * player's village.
  */
 public class Miner extends ResourceVillager {

@@ -2,7 +2,6 @@ package game_elements.inhabitant.villager;
 
 import game_elements.ResourceType;
 import game_elements.Resources;
-import game_elements.Worker;
 
 /**
  * This class represents the Builder villager in the game. It extends the Worker

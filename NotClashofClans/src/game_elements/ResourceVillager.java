@@ -1,7 +1,7 @@
 package game_elements;
 
 /**
- * This class represents a villager that produces resources for the player's
+ * This class represents a villager that produces getResources for the player's
  * village. Extends the Inhabitant class.
  */
 public class ResourceVillager extends Inhabitant {
@@ -33,10 +33,10 @@ public class ResourceVillager extends Inhabitant {
     }
 
     /**
-     * Produces resources based on the villager's production capacity and
+     * Produces getResources based on the villager's production capacity and
      * the type of resource it produces.
      * 
-     * @return the resources produced by the villager
+     * @return the getResources produced by the villager
      */
     public Resources produceResource() {
         Resources produced = new Resources();

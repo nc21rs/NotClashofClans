@@ -12,7 +12,7 @@ public class ResourceBuilding extends Building{
 
     /**
      * Get resource output type and quantity
-     * @return the amount of resources structure produces
+     * @return the amount of getResources structure produces
      */
     public Resources getProduction() {
         return production;
@@ -37,7 +37,7 @@ public class ResourceBuilding extends Building{
     }
 
     /**
-     * Maximum number of resources a single farm can hold
+     * Maximum number of getResources a single farm can hold
      * @return maximum capacity
      */
     public int getResourceCapacity() {
@@ -45,8 +45,8 @@ public class ResourceBuilding extends Building{
     }
 
     /**
-     * edit capacity of resources farm can hold
-     * @param resourceCapacity maximum limit it can hold resources
+     * edit capacity of getResources farm can hold
+     * @param resourceCapacity maximum limit it can hold getResources
      */
     protected void setResourceCapacity(int resourceCapacity) {
         this.resourceCapacity = resourceCapacity;
