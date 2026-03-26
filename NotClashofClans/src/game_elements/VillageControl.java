@@ -130,6 +130,7 @@ public class VillageControl {
         } else {
             //subtract cost
             Resources cost = armyUnit.getProductionCost();
+            
             village.getResources().subtract(ResourceType.FOOD, cost.getAmount(ResourceType.FOOD));
             village.getResources().subtract(ResourceType.WOOD, cost.getAmount(ResourceType.WOOD));
             village.getResources().subtract(ResourceType.IRON, cost.getAmount(ResourceType.IRON));

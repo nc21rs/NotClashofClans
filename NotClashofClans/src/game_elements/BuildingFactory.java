@@ -1,7 +1,6 @@
 package game_elements;
 
 import game_elements.building.*;
-import game_elements.inhabitant.army.Archer;
 
 import java.util.InputMismatchException;
 

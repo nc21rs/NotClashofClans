@@ -32,7 +32,7 @@ public class InhabitantFactory {
             case "CATAPULT":
                 return new Catapult();
             default:
-                throw new IllegalArgumentException("Invalid inhabitant type: " + type);
+                throw new InputMismatchException("Invalid inhabitant type: " + type);
         }
     }
 }
