@@ -119,8 +119,10 @@ public class GameEngine {
                 if (!canAttack(village.getArmy(), exploredVillage)) {
                     userInterface.print("Cannot attack.");
                 }
-
-                ComputedBattle battleResult = attack(village, exploredVillage);
+                
+                // ADAPTER DESIGN PATTERN
+                AttackAdapter attackAdapter = new AttackAdapter();
+                ComputedBattle battleResult = attackAdapter.computeBattle(village, exploredVillage);
 
                 if (battleResult.didWin()) {
                     userInterface.print("You won the battle. Loot gained: " + battleResult.getLoot().toString());
