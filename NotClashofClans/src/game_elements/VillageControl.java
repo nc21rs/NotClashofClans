@@ -20,19 +20,19 @@ public class VillageControl {
     }
 
     //Getters & Setters
-    protected Army getArmy(){return village.getArmy();}
-    protected boolean getGuard(){return village.getGuard();}
-    protected int getMapSize(){return village.getMapSize();}
-    protected ResourceStorage getResources(){return village.getResources();}
-    protected ArrayList<Building> getBuildings(){return village.getBuildings();}
-    protected ArrayList<BackgroundTask> getBgTasks(){return village.getBgTasks();}
-    protected ArrayList<Inhabitant> getInhabitants(){return village.getInhabitants();}
-    protected int getAvailableWorkers(){return village.getNumWorkers();}
-    protected int getAvailableBuilders(){return village.getNumBuilders();}
-    protected int getMaxWorker(){return village.getMaxWorker();}
-    protected int getMaxBuilder(){return village.getMaxBuilder();}
-    protected int getMaxBuilding(){return village.getMaxBuilding();}
-    protected int getNumBuilding(){return village.getNumBuilding();}
+    public Army getArmy(){return village.getArmy();}
+    public boolean getGuard(){return village.getGuard();}
+    public int getMapSize(){return village.getMapSize();}
+    public ResourceStorage getResources(){return village.getResources();}
+    public ArrayList<Building> getBuildings(){return village.getBuildings();}
+    public ArrayList<BackgroundTask> getBgTasks(){return village.getBgTasks();}
+    public ArrayList<Inhabitant> getInhabitants(){return village.getInhabitants();}
+    public int getAvailableWorkers(){return village.getNumWorkers();}
+    public int getAvailableBuilders(){return village.getNumBuilders();}
+    public int getMaxWorker(){return village.getMaxWorker();}
+    public int getMaxBuilder(){return village.getMaxBuilder();}
+    public int getMaxBuilding(){return village.getMaxBuilding();}
+    public int getNumBuilding(){return village.getNumBuilding();}
 
     protected void setArmy(Army army){village.setArmy(army);}
     protected void setIsGuard(boolean setGaurd){village.setIsGuard(setGaurd);}
@@ -49,11 +49,6 @@ public class VillageControl {
     protected void removeBuilding(Building building){village.getBuildings().remove(building);}
     protected void addInhabitant(Inhabitant inhabitant){village.getInhabitants().add(inhabitant);}
     protected void removeInhabitant(Inhabitant inhabitant){village.getInhabitants().remove(inhabitant);}
-
-//    protected void incrementBuilder(){setAvailableBuilders(getAvailableBuilders()+1);}
-//    protected void decrementBuilder(){setAvailableBuilders(getAvailableBuilders()-1);}
-//    protected void incrementWorker(){setAvailableWorkers(getAvailableWorkers()+1);}
-//    protected void decrementWorker(){setAvailableWorkers(getAvailableWorkers()-1);}
 
     //============================ Helper Methods ====================================================================//
     //Queries that the game engine can request Village to perform.
@@ -96,7 +91,7 @@ public class VillageControl {
      * @throws MaxLevel error should the building already maxed out
      */
     public void upgradeBuilding(int x, int y) throws NoBuilderAvaliable, NothingToUpgrade, MaxLevel {
-        if(this.getAvailableBuilders()<=0) {   //builders avaliable?
+        if(this.getAvailableBuilders()<=0) {   //builders available?
             throw new NoBuilderAvaliable();
         } else if (buildingMap[x][y] == null){  //selected tile is empty?
             throw new NothingToUpgrade();
@@ -197,34 +192,52 @@ public class VillageControl {
         this.getResources().subtract(ResourceType.GOLD,cost.getAmount(ResourceType.GOLD));
     }
 
+    public void updateTasks(){ //todo turn into thread (using ExecutorService, autocloseable [requires Java19+])
+        for (BackgroundTask backgroundTask : this.getBgTasks()) {
+            backgroundTask.performTask(this.village);
+        }
+    }
 }
-
-
-
 //================================ Custom Exceptions =================================================================//
-class NotEnoughResources extends Exception {
-    public NotEnoughResources() {super("Error: Missing Resources");}
-}
-class NoBuilderAvaliable extends Exception {
-    public NoBuilderAvaliable() {super("Error: No Builder Available");}
-}
 class BuildingInTheWay extends Exception {
-    public BuildingInTheWay(String buildingName) {super("Error: Cannot build here, "+buildingName+ " is in the way");}
-}
-class NothingToUpgrade extends Exception {
-    public NothingToUpgrade() {super("Error: There is nothing to upgrade");}
-}
-class MaxLevel extends Exception {
-    public MaxLevel(String target) {super("Error: "+target+" at Max Level");}
-}
-class MaxBuilding extends Exception {
-    public MaxBuilding() {super("Error: Building Limit");}
-}
-class MaxWorker extends Exception {
-    public MaxWorker() {super("Error: Worker Limit");}
+    public BuildingInTheWay(String buildingName) {
+        super("Error: Cannot build here, " + buildingName + " is in the way");
+    }
 }
 class MaxBuilder extends Exception {
-    public MaxBuilder() {super("Error: Builder Limit");}
+    public MaxBuilder() {
+        super("Error: Builder Limit");
+    }
+}
+class MaxBuilding extends Exception {
+    public MaxBuilding() {
+        super("Error: Building Limit");
+    }
+}
+class MaxLevel extends Exception {
+    public MaxLevel(String target) {
+        super("Error: " + target + " at Max Level");
+    }
+}
+class MaxWorker extends Exception {
+    public MaxWorker() {
+        super("Error: Worker Limit");
+    }
+}
+class NoBuilderAvaliable extends Exception {
+    public NoBuilderAvaliable() {
+        super("Error: No Builder Available");
+    }
+}
+class NotEnoughResources extends Exception {
+    public NotEnoughResources() {
+        super("Error: Missing Resources");
+    }
+}
+class NothingToUpgrade extends Exception {
+    public NothingToUpgrade() {
+        super("Error: There is nothing to upgrade");
+    }
 }
 //================================== Threading =======================================================================//
 //class TaskThread extends Thread {
