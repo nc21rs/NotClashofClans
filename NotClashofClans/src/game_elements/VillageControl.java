@@ -1,5 +1,7 @@
 package game_elements;
 
+import game_elements.building.TownHall;
+import game_elements.exceptions.*;
 import game_elements.inhabitant.villager.Builder;
 import game_elements.inhabitant.villager.Collector;
 
@@ -12,11 +14,24 @@ public class VillageControl {
 
     //Java Version Dependency: Java19+ ExecutorService is autocloseable, can be used with try(with resources).
      public VillageControl(VillageModel village, VillageView view) {
-        this.village = village;
-        this.view = view;
-        buildingMap = new Building[this.village.getMapSize()][this.village.getMapSize()];
-        setAvailableBuilders(2);    //Player by default start with 2 builders
-
+         this.village = village;
+         this.view = view;
+         buildingMap = new Building[this.village.getMapSize()][this.village.getMapSize()];
+         setAvailableBuilders(2);    //Player by default start with 2 builders
+         setBgTasks(new ArrayList<>());
+         setIsGuard(true);
+         setArmy(new Army());
+         setMaxWorker(2);
+         setMaxBuilder(3);
+         setMaxBuilding(5);
+         setResources(new ResourceStorage());
+         setAvailableWorkers(2);
+         setBuildings(new ArrayList<>());
+         setInhabitants(new ArrayList<>());
+         BuildingFactory bf = new BuildingFactory();
+         Building townhall = bf.createBuilding("TOWNHALL",this.village.getMapSize()/2,this.village.getMapSize()/2);
+         addBuilding(townhall);
+         buildingMap[townhall.getPosX()][townhall.getPosY()] = townhall;
     }
 
     //Getters & Setters
@@ -44,6 +59,8 @@ public class VillageControl {
     protected void setBgTasks(ArrayList<BackgroundTask> bgTasks){village.setBgTasks(bgTasks);}
     protected void setAvailableWorkers(int availableWorkers){village.setNumWorkers(availableWorkers);}
     protected void setAvailableBuilders(int availableBuilders){village.setNumBuilders(availableBuilders);}
+    protected void setBuildings (ArrayList<Building> buildings){village.setBuildings(buildings);}
+    protected void setInhabitants(ArrayList<Inhabitant> inhabitants){village.setInhabitants(inhabitants);}
 
     protected void addBuilding(Building building){village.getBuildings().add(building);}
     protected void removeBuilding(Building building){village.getBuildings().remove(building);}
@@ -201,46 +218,18 @@ public class VillageControl {
     public Building getBuilding(int x, int y) {
         return buildingMap[x][y];
     }
-}
-//================================ Custom Exceptions =================================================================//
-class BuildingInTheWay extends Exception {
-    public BuildingInTheWay(String buildingName) {
-        super("Error: Cannot build here, " + buildingName + " is in the way");
+
+    public void addResources(Resources resources) {
+        this.getResources().add(ResourceType.FOOD, resources.getAmount(ResourceType.FOOD));
+        this.getResources().add(ResourceType.WOOD, resources.getAmount(ResourceType.WOOD));
+        this.getResources().add(ResourceType.IRON, resources.getAmount(ResourceType.IRON));
+        this.getResources().add(ResourceType.GOLD, resources.getAmount(ResourceType.GOLD));
     }
-}
-class MaxBuilder extends Exception {
-    public MaxBuilder() {
-        super("Error: Builder Limit");
-    }
-}
-class MaxBuilding extends Exception {
-    public MaxBuilding() {
-        super("Error: Building Limit");
-    }
-}
-class MaxLevel extends Exception {
-    public MaxLevel(String target) {
-        super("Error: " + target + " at Max Level");
-    }
-}
-class MaxWorker extends Exception {
-    public MaxWorker() {
-        super("Error: Worker Limit");
-    }
-}
-class NoBuilderAvaliable extends Exception {
-    public NoBuilderAvaliable() {
-        super("Error: No Builder Available");
-    }
-}
-class NotEnoughResources extends Exception {
-    public NotEnoughResources() {
-        super("Error: Missing Resources");
-    }
-}
-class NothingToUpgrade extends Exception {
-    public NothingToUpgrade() {
-        super("Error: There is nothing to upgrade");
+    public void subtractResources(Resources resources) {
+        this.getResources().subtract(ResourceType.FOOD, resources.getAmount(ResourceType.FOOD));
+        this.getResources().subtract(ResourceType.WOOD, resources.getAmount(ResourceType.WOOD));
+        this.getResources().subtract(ResourceType.IRON, resources.getAmount(ResourceType.IRON));
+        this.getResources().subtract(ResourceType.GOLD, resources.getAmount(ResourceType.GOLD));
     }
 }
 //================================== Threading =======================================================================//

@@ -4,7 +4,7 @@ import game_elements.ResourceType;
 import game_elements.VillageControl;
 import game_engine.ActionType;
 import game_elements.Village;
-import game_engine.GameEngine;
+//import game_engine.GameEngine;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -127,7 +127,7 @@ public class UserInterface {
      * 
      * @param village the Village to be displayed
      */
-    public void displayVillage(Village village) {
+    public void displayVillage(VillageControl village) {
         if (village == null) {
             System.out.println("No village provided");
             return;
