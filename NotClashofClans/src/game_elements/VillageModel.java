@@ -61,6 +61,8 @@ public class VillageModel {
     protected void setNumBuilders(int numBuilders) {this.numBuilders = numBuilders;}
     protected void setResources (ResourceStorage resources){this.resources = resources;}
     protected void setBgTasks(ArrayList<BackgroundTask> bgTasks){this.bgTasks = bgTasks;}
+    protected void setBuildings (ArrayList<Building> buildings){this.buildings = buildings;}
+    protected void setInhabitants(ArrayList<Inhabitant> inhabitants){this.inhabitants = inhabitants;}
 
 
     protected void addBuilding(Building building){buildings.add(building);}

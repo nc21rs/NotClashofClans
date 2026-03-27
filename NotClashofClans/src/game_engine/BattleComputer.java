@@ -13,7 +13,7 @@ public class BattleComputer {
     // Will use later for more complex battle mechanics
     private Random dice = new Random();
 
-    public ComputedBattle computedBattle(Village attacker, Village village) {
+    public ComputedBattle computedBattle(VillageControl attacker, VillageControl village) {
         int attackScore = computeAttackScore(attacker);
         int defenceScore = computeDefenceScore(village);
         boolean win = attackScore > defenceScore;
@@ -29,7 +29,7 @@ public class BattleComputer {
      * @param attacker the Army that is attacking
      * @return the attack score of the army
      */
-    private int computeAttackScore(Village attacker) {
+    private int computeAttackScore(VillageControl attacker) {
         if (attacker == null) {
             return 0;
         }
@@ -52,7 +52,7 @@ public class BattleComputer {
      * @param village the Village that is being defended
      * @return the defence score of the village
      */
-    private int computeDefenceScore(Village village) {
+    private int computeDefenceScore(VillageControl village) {
         if (village == null) {
             return 0;
         }
@@ -91,12 +91,12 @@ public class BattleComputer {
      * @param win     whether the attacker won or not
      * @return the Resources representing the loot obtained from the attack
      */
-    private Resources computeLoot(Village village, boolean win) {
+    private Resources computeLoot(VillageControl village, boolean win) {
         Resources loot = new Resources();
 
         if (win) {
             for (ResourceType type : ResourceType.values()) {
-                int amount = dice.nextInt(village.getResourceAmount(type) + 1); // random amount between 0 and total
+                int amount = dice.nextInt(village.getResources().getResource(type) + 1); // random amount between 0 and total
                                                                                 // getResources of that type in the
                                                                                 // village
                 loot.setAmount(type, amount);

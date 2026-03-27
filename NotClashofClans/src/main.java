@@ -1,15 +1,8 @@
-import game_engine.GameEngine;
-
-class A{}
-class B extends A{}
-class C extends A{}
-
-
+import game_engine.GameEngineControl;
 
 public class main {
     public static void main(String[] args) {
-//        GameEngine gameEngine = new GameEngine();
-
+        GameEngineControl control = new GameEngineControl();
 
     }
 

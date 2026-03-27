@@ -28,8 +28,7 @@ public class BackgroundTask <T extends Upgradeable>{
                 if (target instanceof Building) { //if building, set to destroyed to false. (our indicator for building)
                     Building building = (Building) target;
                     building.setDestroyed(false);
-                } else if (target instanceof ArmyUnit) {//add to unit to army
-                    ArmyUnit armyUnit = (ArmyUnit) target;
+                } else if (target instanceof ArmyUnit armyUnit) {//add to unit to army
                     village.getArmy().addUnit(armyUnit);
                 } else if (target instanceof ResourceVillager) {
                     village.setNumWorkers(village.getNumWorkers()+1);
