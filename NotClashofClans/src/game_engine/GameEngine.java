@@ -73,9 +73,9 @@ public class GameEngine {
         while (running) {
             updateTasks(); // check any running tasks.
             // display info
-            userInterface.displayResources(village);
+//            userInterface.displayResources(village);
             // display map
-            userInterface.displayMap(village);
+//            userInterface.displayMap(village);
             // display options to user
             userInterface.displayOptions();
 
@@ -149,7 +149,7 @@ public class GameEngine {
     }
 
 
-    
+
 
     public void updateTasks() {
         showTasks();
@@ -183,7 +183,7 @@ public class GameEngine {
 
     /**
      * Returns a boolean value indicating whether a player can attack a village
-     * 
+     *
      * @param attacker the Army that is attacking
      * @param village  the Village that is being attacked
      * @return a boolean value indicating whether the attack is possible
@@ -210,7 +210,7 @@ public class GameEngine {
 
     /**
      * Returns a boolean value indicating whether a player can upgrade an element
-     * 
+     *
      * @param element the Upgradeable element
      * @param village the Village that contains the element
      * @return a boolean value indicating whether the upgrade is possible
@@ -239,7 +239,7 @@ public class GameEngine {
 
     /**
      * Returns a boolean value indicating whether a player can build a building
-     * 
+     *
      * @param building the Building to be constructed
      * @param village  the Village that contains the building
      * @return a boolean value indicating whether the building can be constructed
@@ -276,7 +276,7 @@ public class GameEngine {
 
     /**
      * Returns a boolean value indicating whether a player can train an inhabitant
-     * 
+     *
      * @param inhabitant the Inhabitant of the village
      * @param village    the Village that contains the Inhabitant
      * @return a boolean value indicating whether the training is possible
@@ -311,7 +311,7 @@ public class GameEngine {
 
     /**
      * Returns a ComputedBattle object representing the result of an attack
-     * 
+     *
      * @param attacker the Village that has the army attacking
      * @param defender the Village that is being attacked
      * @return a ComputedBattle object representing the result of the attack
@@ -337,7 +337,7 @@ public class GameEngine {
     /**
      * Returns an ActionTimer object representing the time required to upgrade an
      * element
-     * 
+     *
      * @param element the Upgradeable element
      * @param village the Village that contains the element
      * @return an ActionTimer object representing the time required to upgrade the
@@ -356,7 +356,7 @@ public class GameEngine {
     /**
      * Returns an ActionTimer object representing the time required to build a
      * building
-     * 
+     *
 //     * @param element the Building
      * @param village the Village where the building is being constructed
      * @return an ActionTimer object representing the time required to build the
@@ -376,7 +376,7 @@ public class GameEngine {
     /**
      * Returns an ActionTimer object representing the time required to train an
      * inhabitant
-     * 
+     *
 //     * @param element the Inhabitant element
      * @param village the Village where the inhabitant is being trained
      * @return an ActionTimer object representing the time required to train the
@@ -395,7 +395,7 @@ public class GameEngine {
     /**
      * Returns a Village object representing the result of exploring for new
      * villages
-     * 
+     *
      * @return a Village object generated when exploring for new villages
      */
     public Village exploreVillages() {
@@ -404,7 +404,7 @@ public class GameEngine {
 
     /**
      * Returns an Army object representing the result of generating an incoming army
-     * 
+     *
      * @return an Army object generated when a village is attacked
      */
     public Army generateIncomingArmy() {

@@ -197,6 +197,10 @@ public class VillageControl {
             backgroundTask.performTask(this.village);
         }
     }
+    //----------------------------------------------------------------------------------------------------------------//
+    public Building getBuilding(int x, int y) {
+        return buildingMap[x][y];
+    }
 }
 //================================ Custom Exceptions =================================================================//
 class BuildingInTheWay extends Exception {

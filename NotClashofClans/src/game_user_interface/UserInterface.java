@@ -1,6 +1,7 @@
 package game_user_interface;
 
 import game_elements.ResourceType;
+import game_elements.VillageControl;
 import game_engine.ActionType;
 import game_elements.Village;
 import game_engine.GameEngine;
@@ -32,15 +33,15 @@ public class UserInterface {
     /**
      * Method to display the map of the current village.
      */
-    public void displayMap(Village village) {
+    public void displayMap(VillageControl village) {
         System.out.println("Map size is " + width + "x" + height);
         System.out.println("===== Map =====");
 
         // Print a grid of dots representing the map using streams
         IntStream.range(0, height).forEach(row -> {
             IntStream.range(0, width).forEach(col -> {
-                if (village.getBuildingAt(row, col) != null) {
-                    System.out.print(village.getBuildingAt(row, col).getShortName() + " ");
+                if (village.getBuilding(row, col) != null) {
+                    System.out.print(village.getBuilding(row, col).getShortName() + " ");
                 } else {
                     System.out.print(". ");
                 }
@@ -144,7 +145,7 @@ public class UserInterface {
      *
      * @param village the Village whose getResources will be displayed
      */
-    public void displayResources(Village village) {
+    public void displayResources(VillageControl village) {
         if (village == null) {
             System.out.println("No village provided.");
             return;
@@ -152,10 +153,10 @@ public class UserInterface {
 
         System.out.println("\n===== RESOURCES =====");
         // prints each resource individually.
-        System.out.printf("%d Food\n", village.getResourceAmount(ResourceType.FOOD));
-        System.out.printf("%d Wood\n", village.getResourceAmount(ResourceType.WOOD));
-        System.out.printf("%d Iron\n", village.getResourceAmount(ResourceType.IRON));
-        System.out.printf("%d Gold\n", village.getResourceAmount(ResourceType.GOLD));
+        System.out.printf("%d Food\n", village.getResources().getResource(ResourceType.FOOD));
+        System.out.printf("%d Wood\n", village.getResources().getResource(ResourceType.WOOD));
+        System.out.printf("%d Iron\n", village.getResources().getResource(ResourceType.IRON));
+        System.out.printf("%d Gold\n", village.getResources().getResource(ResourceType.GOLD));
 //        System.out.printf("%d Population\n", village.getResourceAmount(ResourceType.POPULATION));
         System.out.println("=====================\n");
     }
