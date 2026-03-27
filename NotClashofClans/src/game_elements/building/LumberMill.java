@@ -16,7 +16,8 @@ public class LumberMill extends ResourceBuilding {
         setLevel(1);
         setMaxLevel(10);
         setDestroyed(false);
-        setWorkerCapacity(2);
+        setMaxWorkers(3);   //max is 3
+        setNumWorkers(0);   //starts with 0
         setShortName('L');
 
         // Build Cost

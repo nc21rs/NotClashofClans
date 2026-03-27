@@ -6,6 +6,7 @@ package game_elements;
  */
 public class Inhabitant implements Damageable, Upgradeable, CanAttack {
     /** Attributes */
+    private String name;
     private int health;
     private int posX;
     private int posY;
@@ -50,6 +51,11 @@ public class Inhabitant implements Damageable, Upgradeable, CanAttack {
         this.posX = x;
         this.posY = y;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {return name;}
 
     protected void setAttackDamage(int attackDamage) {
         this.attackDamage = attackDamage;

@@ -17,7 +17,8 @@ public class Farm extends ResourceBuilding {
         setLevel(1);
         setMaxLevel(10);
         setDestroyed(false);
-        setWorkerCapacity(1);
+        setMaxWorkers(3);   //max is 3
+        setNumWorkers(0);   //starts with 0
         setShortName('F');
 
         //Build Cost

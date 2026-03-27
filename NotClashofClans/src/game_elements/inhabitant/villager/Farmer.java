@@ -12,6 +12,7 @@ import game_elements.ResourceVillager;
  */
 public class Farmer extends ResourceVillager {
     public Farmer() {
+        setName("Farmer");
         setHealth(70);
         setAttackDamage(5);
         setRange(1);

@@ -10,6 +10,7 @@ import game_elements.Resources;
  */
 public class Builder extends Worker {
     public Builder(){
+        setName("Builder");
         setHealth(70);
         setAttackDamage(5);
         setRange(1);

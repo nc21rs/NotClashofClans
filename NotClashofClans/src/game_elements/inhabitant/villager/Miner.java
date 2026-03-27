@@ -11,6 +11,7 @@ import game_elements.Resources;
  */
 public class Miner extends ResourceVillager {
     public Miner() {
+        setName("Miner");
         setHealth(70);
         setAttackDamage(5);
         setRange(1);
