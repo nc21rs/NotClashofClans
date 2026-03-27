@@ -227,4 +227,34 @@ public class UserInterface {
         System.out.println(msg);
     }
 
+    public String getBuildingChoice(){
+        print("\n===== Building Options =====");
+        print("1. Farm");
+        print("2. Lumber Mill");
+        print("3. Iron Mine");
+        print("4. Gold Mine");
+        print("5. Cannon");
+        print("6. Archer Tower"); 
+
+        int userChoice = scanner.nextInt();
+
+        switch (userChoice) {
+            case 1:
+                return "TOWNHALL";
+            case 2:
+                return "CANNON";
+            case 3:
+                return "ARCHERTOWER";
+            case 4:
+                return "FARM";
+            case 5:
+                return "LUMBERMILL";
+            case 6:
+                return "IRONMINE";
+            case 7:
+                return "GOLDMINE";
+            default:
+                return null;
+        }
+    }
 }
