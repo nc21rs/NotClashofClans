@@ -2,7 +2,6 @@ package game_engine;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class GameEngineClient {
@@ -44,7 +43,7 @@ public class GameEngineClient {
                 }
             }
 
-        }   catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Client error: " + e.getMessage());
         } catch (ClassNotFoundException e) {
             System.err.println("Client error: " + e.getMessage());
