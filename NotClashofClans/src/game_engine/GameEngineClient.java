@@ -1,9 +1,9 @@
+package game_engine;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
-
-package game_engine;
 
 public class GameEngineClient {
 
