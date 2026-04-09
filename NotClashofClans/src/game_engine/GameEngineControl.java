@@ -8,37 +8,39 @@ import game_elements.inhabitant.villager.Collector;
 import game_user_interface.InvalidMenuChoiceException;
 import game_user_interface.UserInterface;
 
-class GameEngineModel{
+class GameEngineModel {
     protected VillageControl village;
     protected boolean run;
     protected BattleComputer battleComputer;
     protected UserInterface userInterface;
     protected AttackExplorer attackExplorer;
     protected VillageControl exploredVillage;
-//    private BuildingFactory buildingFactory;
-//    private InhabitantFactory inhabitantFactory;
-
+    // private BuildingFactory buildingFactory;
+    // private InhabitantFactory inhabitantFactory;
 
 }
 
 public class GameEngineControl {
     GameEngineModel gameEngineModel;
-    public GameEngineControl(){
+
+    public GameEngineControl() {
         gameEngineModel = new GameEngineModel();
         gameEngineModel.village = new VillageControl(new VillageModel(), new VillageView());
         gameEngineModel.run = true;
         gameEngineModel.battleComputer = new BattleComputer();
-        gameEngineModel.userInterface = new UserInterface(gameEngineModel.village.getMapSize(),gameEngineModel.village.getMapSize());
+        gameEngineModel.userInterface = new UserInterface(gameEngineModel.village.getMapSize(),
+                gameEngineModel.village.getMapSize());
         gameEngineModel.attackExplorer = new AttackExplorer();
         gameEngineModel.exploredVillage = new VillageControl(new VillageModel(), new VillageView());
-        runGame();
+        // runGame();
 
     }
-    //================================================================================================================//
-    private void runGame(){
-        while(gameEngineModel.run){
-            gameEngineModel.village.updateTasks(); //thread this later :)
-            gameEngineModel.userInterface.displayResources(gameEngineModel.village);    //show resources
+
+    // ================================================================================================================//
+    private void runGame() {
+        while (gameEngineModel.run) {
+            gameEngineModel.village.updateTasks(); // thread this later :)
+            gameEngineModel.userInterface.displayResources(gameEngineModel.village); // show resources
             gameEngineModel.userInterface.displayMap(gameEngineModel.village);
             gameEngineModel.userInterface.displayOptions();
 
@@ -51,6 +53,28 @@ public class GameEngineControl {
         }
     }
 
+    public void runConsoleGame() {
+        runGame();
+    }
+
+    public String processRequest(String request) {
+
+        if (request == null) {
+            return "Request cannot be null";
+        }
+
+        String[] requestComponents = request.trim().toUpperCase().split(" ");
+        String action = requestComponents[0];
+
+        switch (action) {
+            // TODO: IMPLEMENT THE COMMAND PARSER HERE, I FELL LIKE WE CAN MODIFY ACTION
+            // METHOD INSTEAD
+            // WILL DO IT LATER
+        }
+
+        return null;
+    }
+
     public void action(ActionType actionType) {
         switch (actionType) {
             case QUIT:
@@ -60,36 +84,37 @@ public class GameEngineControl {
 
             case UPGRADE_BUILD:
                 // get x and y coords
-                int[] coords = gameEngineModel.userInterface.getCoords(gameEngineModel.village.getMapSize(), gameEngineModel.village.getMapSize());
-                try{
-                    gameEngineModel.village.upgradeBuilding(coords[0],coords[1]);
-                } catch(NoBuilderAvaliable noBuilderAvaliable){
+                int[] coords = gameEngineModel.userInterface.getCoords(gameEngineModel.village.getMapSize(),
+                        gameEngineModel.village.getMapSize());
+                try {
+                    gameEngineModel.village.upgradeBuilding(coords[0], coords[1]);
+                } catch (NoBuilderAvaliable noBuilderAvaliable) {
                     gameEngineModel.userInterface.print("No Builder Available");
-                } catch (NothingToUpgrade nothingToUpgrade){
+                } catch (NothingToUpgrade nothingToUpgrade) {
                     gameEngineModel.userInterface.print("Nothing to upgrade");
-                } catch (MaxLevel maxLevel){
+                } catch (MaxLevel maxLevel) {
                     gameEngineModel.userInterface.print("Building is Max Level");
                 }
                 break;
 
             case BUILD:
-                try{
+                try {
                     gameEngineModel.village.placeBuilding(new Cannon());
-                } catch (NoBuilderAvaliable noBuilderAvaliable){
+                } catch (NoBuilderAvaliable noBuilderAvaliable) {
                     gameEngineModel.userInterface.print("No Builder Available");
-                } catch (NotEnoughResources notEnoughResources){
+                } catch (NotEnoughResources notEnoughResources) {
                     gameEngineModel.userInterface.print("Not Enough Resources");
-                } catch (BuildingInTheWay buildingInTheWay){
+                } catch (BuildingInTheWay buildingInTheWay) {
                     gameEngineModel.userInterface.print("Building In The Way");
-                } catch (MaxBuilding MaxBuilding){
+                } catch (MaxBuilding MaxBuilding) {
                     gameEngineModel.userInterface.print("Reach Structure Capacity");
                 }
                 break;
 
             case TRAIN:
-                try{
+                try {
                     gameEngineModel.village.trainArmy(new Archer());
-                } catch (NotEnoughResources notEnoughResources){
+                } catch (NotEnoughResources notEnoughResources) {
                     gameEngineModel.userInterface.print("Not Enough Resources");
                 }
                 break;
@@ -106,7 +131,8 @@ public class GameEngineControl {
                 ComputedBattle battleResult = attack(gameEngineModel.village, gameEngineModel.exploredVillage);
 
                 if (battleResult.didWin()) {
-                    gameEngineModel.userInterface.print("You won the battle. Loot gained: " + battleResult.getLoot().toString());
+                    gameEngineModel.userInterface
+                            .print("You won the battle. Loot gained: " + battleResult.getLoot().toString());
                     gameEngineModel.village.addResources(battleResult.getLoot());
                 } else {
                     gameEngineModel.userInterface.print("You lost the battle.");
@@ -114,24 +140,26 @@ public class GameEngineControl {
                 break;
 
             case PRODUCE:
-                try{
+                try {
                     gameEngineModel.village.trainWorker(new Collector());
-                } catch (NotEnoughResources notEnoughResources){
+                } catch (NotEnoughResources notEnoughResources) {
                     gameEngineModel.userInterface.print("Not Enough Resources");
-                } catch (MaxWorker maxWorker){
+                } catch (MaxWorker maxWorker) {
                     gameEngineModel.userInterface.print("Max Worker");
-                } catch (MaxLevel maxLevel){
+                } catch (MaxLevel maxLevel) {
                     gameEngineModel.userInterface.print("Max Level");
                 }
                 break;
 
             case EXPLORE:
-//                gameEngineModel.exploredVillage = gameEngineModel.attackExplorer.reRollCandidate();   //todo adapt .reRollCanadidate() to use VillageControl
+                // gameEngineModel.exploredVillage =
+                // gameEngineModel.attackExplorer.reRollCandidate(); //todo adapt
+                // .reRollCanadidate() to use VillageControl
                 gameEngineModel.userInterface.print("Found a new village");
                 break;
 
             case UPGRADE_TROOP:
-//                userInterface.print("Upgrade troop not implemented yet");
+                // userInterface.print("Upgrade troop not implemented yet");
                 break;
 
             default:
@@ -181,12 +209,14 @@ public class GameEngineControl {
             // Attacker won: add loot to attacker, remove from defender, and set guard time
             // for defender
             defender.subtractResources(battleResult.getLoot());
-//            defender.setGuardTime(System.currentTimeMillis() + 3600000); //todo adapt backgroundTask to accept gaurd time
+            // defender.setGuardTime(System.currentTimeMillis() + 3600000); //todo adapt
+            // backgroundTask to accept gaurd time
             attacker.addResources(battleResult.getLoot());
             return battleResult;
         } else {
             // Attacker lost: set guard time for attacker
-//            attacker(System.currentTimeMillis() + 3600000);   //todo adapt backgroundTask to accept gaurd time
+            // attacker(System.currentTimeMillis() + 3600000); //todo adapt backgroundTask
+            // to accept gaurd time
             return battleResult;
         }
     }
