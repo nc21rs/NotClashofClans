@@ -60,7 +60,7 @@ public class GameEngineServer {
                     String response = engineControl.processRequest(requestStr);
 
                     // Send response back to client
-                    out.writeObject("Server received request: " + requestStr);
+                    out.writeObject("Server received request: " + response);
                     out.flush();
                 }
             }
