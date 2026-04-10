@@ -8,7 +8,7 @@ import java.io.*;
  * This class represents the a basic server for the game.
  * Listen for a client connection and handles basic communication.
  * Useful prints are also included for easier debugging,
- * 
+ *
  * TO-DO: NOT TOO SURE IF ALL PRINTS WILL BE NEEDED.
  */
 
@@ -18,7 +18,7 @@ public class GameEngineServer {
 
         // Initialize Game Engine Controller
         GameEngineControl engineControl = new GameEngineControl(); // server owns game engine control, which controls
-                                                                   // the game engine model
+        // the game engine model
 
         try (ServerSocket server = new ServerSocket(4444)) {
             System.out.println("Game Engine Server is running on port 4444...");
