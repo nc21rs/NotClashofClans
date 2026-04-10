@@ -5,5 +5,5 @@ package game_engine;
  * the game. Each action type corresponds to a specific action that the player can take.
  */
 public enum ActionType {
-    BUILD, TRAIN, PRODUCE, UPGRADE_TROOP, UPGRADE_BUILD, EXPLORE, ATTACK, QUIT;
+    BUILD, TRAIN, PRODUCE, UPGRADE_TROOP, UPGRADE_BUILD, EXPLORE, ATTACK, QUIT, NULL, NOT_ACTION, LIST, UPGRADE;
 }

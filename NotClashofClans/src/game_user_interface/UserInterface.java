@@ -3,12 +3,9 @@ package game_user_interface;
 import game_elements.ResourceType;
 import game_elements.VillageControl;
 import game_engine.ActionType;
-import game_elements.Village;
 //import game_engine.GameEngine;
 
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 /**
@@ -201,7 +198,7 @@ public class UserInterface {
         }
 
         scanner.nextLine(); // Crucial: clear the "Enter" key from the buffer
-        return new int[] { x, y };
+        return new int[]{x, y};
     }
 
     /**
@@ -227,7 +224,7 @@ public class UserInterface {
         System.out.println(msg);
     }
 
-    public String getBuildingChoice(){
+    public String getBuildingChoice() {
         print("\n===== Building Options =====");
         print("1. Farm");
         print("2. Lumber Mill");
@@ -257,4 +254,122 @@ public class UserInterface {
                 return null;
         }
     }
+
+    //=======================================================================Section Contains updated User Interaction
+    /*
+
+    /BUILD DEFENCE CANNON 1,1
+    /BUILD RESOURCE GOLDMINE 1,2
+
+    /TRAIN ARMY ARCHER
+    /TRAIN VILLAGER COLLECTOR
+
+    /UPGRADE BUILD 1,1
+    /UPGRADE ARMY ARCHER
+
+    /EXPLORE
+    /NEXT
+    /ATTACK
+
+    /QUIT
+
+    COMMAND LINE FLOWCHART
+    0. LIST
+    1. BUILD
+        a. DEFENSE
+        b. RESOURCE
+    2. TRAIN
+        a. ARMY
+        b. VILLAGER
+    3. UPGRADE
+        a. BUILDING
+        b. ARMY
+    4. EXPLORE
+        a. NEXT
+        b. ATTACK
+    5. QUIT
+     */
+
+//    /**
+//     * verify that the provided request is what the application is expecting.
+//     * assuming given request is such
+//     *
+//     * @param request the user's request
+//     * @return isValid
+//     */
+//    public boolean validateRequest(String request) {
+//        //Strictly removes the '/' then checks the first word
+//        StringTokenizer tokenizer = new StringTokenizer(request);
+//        String action = tokenizer.nextToken().toUpperCase();  //  {LIST, BUILD, TRAIN, UPGRADE, EXPLORE, QUIT}
+//        action = action.substring(1);
+//        switch (action) {
+//            case "LIST", "BUILD", "TRAIN", "UPGRADE", "EXPLORE", "QUIT":
+//                return true;
+//            default:
+//                return false;
+//        }
+//
+//    }
+
+    /**
+     * check if the provided user input is a request to the server
+     *
+     * @param request String user input
+     * @return isRequest
+     */
+    public boolean isRequest(String request) {
+        //strictly check if not empty, THEN validate if isRequest
+        return request.length() > 1 && request.charAt(0) == '/';
+    }
+
+    //transform user's request in an action
+    public ActionType processRequest(String request) {
+        if (!isRequest(request))
+            return ActionType.NULL;
+//        if (!validateRequest(request))
+//            return ActionType.NOT_ACTION;
+        /*
+        tokenize the request. Only analyze the first token with primary request
+         */
+        StringTokenizer tokenizer = new StringTokenizer(request.substring(1));
+        String action = tokenizer.nextToken().toUpperCase();
+        switch (action) {
+            case "LIST":
+                return ActionType.LIST;
+            case "BUILD":
+                return ActionType.BUILD;
+            case "TRAIN":
+                return ActionType.TRAIN;
+            case "UPGRADE":
+                return ActionType.UPGRADE;
+            case "EXPLORE":
+                return ActionType.EXPLORE;
+            case "QUIT":
+                return ActionType.QUIT;
+            default:
+                return ActionType.NOT_ACTION;
+        }
+    }
+
+    public boolean validateStructure(){
+        return false;
+    }
+
+    public boolean validateUpgrade(){
+        return false;
+    }
+
+
+//    else {
+//        switch (action) {
+//            case "LIST":
+//            case "BUILD":
+//            case "TRAIN":
+//            case "UPGRADE":
+//            case "EXPLORE":
+//            case "QUIT":
+//        }
+//    }
+
+
 }
