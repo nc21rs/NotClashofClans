@@ -69,7 +69,7 @@ public class UserInterface {
 
     /**
      * Method to get the user's action.
-     * 
+     *
      * @return the ActionType corresponding to the user's choice
      */
     public ActionType getUserAction() throws InvalidMenuChoiceException, InputMismatchException {
@@ -110,7 +110,7 @@ public class UserInterface {
 
     /**
      * Method to send the user's action request to the game engine.
-     * 
+     *
      * @param actionType the ActionType corresponding to the user's choice
      */
     public void sendActionRequest(ActionType actionType) {
@@ -124,7 +124,7 @@ public class UserInterface {
 
     /**
      * Method to display the village with buildings.
-     * 
+     *
      * @param village the Village to be displayed
      */
     public void displayVillage(VillageControl village) {
@@ -163,7 +163,7 @@ public class UserInterface {
 
     /**
      * Prompts the user for X and Y coordinates and returns them as an array.
-     * 
+     *
      * @param maxX The maximum width of the map
      * @param maxY The maximum height of the map
      * @return int array [x,y]
@@ -220,7 +220,7 @@ public class UserInterface {
 
     /***
      * organization
-     * 
+     *
      * @param msg message to print
      */
     public void print(String msg) {
@@ -234,7 +234,7 @@ public class UserInterface {
         print("3. Iron Mine");
         print("4. Gold Mine");
         print("5. Cannon");
-        print("6. Archer Tower"); 
+        print("6. Archer Tower");
 
         int userChoice = scanner.nextInt();
 
@@ -257,5 +257,4 @@ public class UserInterface {
                 return null;
         }
     }
-
 }

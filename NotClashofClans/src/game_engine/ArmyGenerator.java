@@ -17,7 +17,7 @@ public class ArmyGenerator extends Thread {
     private Army generatedArmy;
 
     /**
-     * Constructor will initialize the size of the army, then generate an army.
+     * Constructor will initialize the size of the army, then generate an army
      * @param armySize
      */
     public ArmyGenerator(int armySize) {
