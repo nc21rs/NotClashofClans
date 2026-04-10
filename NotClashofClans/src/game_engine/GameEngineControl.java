@@ -15,6 +15,7 @@ class GameEngineModel {
     protected UserInterface userInterface;
     protected AttackExplorer attackExplorer;
     protected VillageControl exploredVillage;
+
     // private BuildingFactory buildingFactory;
     // private InhabitantFactory inhabitantFactory;
 
