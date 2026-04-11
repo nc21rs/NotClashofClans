@@ -15,33 +15,52 @@ public class GameEngineClient {
                 ObjectInputStream in = new ObjectInputStream(client.getInputStream());
                 Scanner scanner = new Scanner(System.in)) {
 
-                    
             System.out.println("Connected to the Game Engine Server, communicating with " + hostname + ":" + port);
 
-            boolean run = true;
+            // AUTHENTICATION PROCESS
+            // get username and password for the authentication process
+            Object response = in.readObject();
+            System.out.println("Server: " + response);
+            String username = scanner.nextLine();
+            out.writeObject(username);
+            out.flush();
 
-            while (run){
+            response = in.readObject();
+            System.out.println("Server: " + response);
+            String password = scanner.nextLine();
+            out.writeObject(password);
+            out.flush();
+
+            // authentication response from server
+            response = in.readObject();
+            System.out.println("Server: " + response);
+
+            // if not authenticated, end the connection with the server
+            if (!((String) response).equals("Login successful")) {
+                System.out.println("Not authenticated, Failed connection");
+                return;
+            }
+
+            // COMMUNICATION WITH SERVER LOOP
+            boolean run = true;
+            while (run) {
                 System.out.println("Enter a command:");
-                String command = scanner.nextLine().trim();
+                String command = scanner.nextLine();
+
+                out.writeObject(command);
+                out.flush();
+
+                // Wait for response from server
+                Object serverResponse = in.readObject();
+                System.out.println(serverResponse);
 
                 if (command.equals("quit")) {
                     run = false;
-                    System.out.println("Quitting Game...");
-                } else {
-                    // TO-DO: MAYBE CREATE SPE PACKET IF WE NEED PAYLOAD TO BE SENT AS WELL AS COMMAND
-                    // FOR NOW JUST SEND THE COMMAND AS A STRING, AND SERVER CAN DECIDE WHAT TO DO WITH IT
-
-                    // Send command to server
-                    out.writeObject(command);
-                    out.flush();
-
-                    // Wait for response from server
-                    Object response = in.readObject();
-                    System.out.println("Server Response: " + response);
-
-            
-                }
+                    System.out.println("Quitting Game");
+                } 
             }
+
+            System.out.println("Connection closed");
 
         } catch (IOException e) {
             System.err.println("Client error: " + e.getMessage());

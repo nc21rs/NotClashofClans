@@ -32,7 +32,7 @@ public class ThreadController implements Runnable {
             boolean loginOk = authenticatePlayer(in, out);
 
             if (loginOk) {
-                out.writeObject("Login successful.");
+                out.writeObject("Login successful");
                 out.flush();
             } else {
                 out.writeObject("Login failed. Invalid username or password.");
@@ -91,8 +91,6 @@ public class ThreadController implements Runnable {
         String username = (String) in.readObject();
 
         if (username == null) {
-            out.writeObject("Invalid username. Authentication failed.");
-            out.flush();
             return false;
         }
 
@@ -101,20 +99,14 @@ public class ThreadController implements Runnable {
         String password = (String) in.readObject();
 
         if (password == null) {
-            out.writeObject("Invalid password. Authentication failed.");
-            out.flush();
             return false;
         }
 
         boolean authenticated = playerDataBase.playerAuthentication(username, password);
 
         if (authenticated) {
-            out.writeObject("Authentication successful.");
-            out.flush();
             return true;
         } else {
-            out.writeObject("Authentication failed. Invalid username or password.");
-            out.flush();
             return false;
         }
 
