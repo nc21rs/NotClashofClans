@@ -1,5 +1,7 @@
 package game_engine;
 
+import javax.swing.Action;
+
 import game_elements.*;
 import game_elements.building.Cannon;
 import game_elements.exceptions.*;
@@ -58,13 +60,15 @@ public class GameEngineControl {
     }
 
     public String processRequest(String request) {
-        String response = "";
+        
         if (request == null)
-            response = "Request cannot be null";
-        if (gameEngineModel.userInterface.isRequest(request)){
-            response = gameEngineModel.userInterface.processRequest(request);
+            return "Request cannot be null";
+
+        ActionType actionType = gameEngineModel.userInterface.processRequest(request);
+        if (actionType == ActionType.NOT_ACTION || actionType == ActionType.NULL) {
+            return "Invalid action";
         }
-        return response;
+        return action(actionType);
     }
 
     public String action(ActionType actionType) {
@@ -77,7 +81,8 @@ public class GameEngineControl {
 
             case UPGRADE_BUILD:
                 // get x and y coords
-                int[] coords = gameEngineModel.userInterface.getCoords(gameEngineModel.village.getMapSize(), gameEngineModel.village.getMapSize());
+                int[] coords = gameEngineModel.userInterface.getCoords(gameEngineModel.village.getMapSize(),
+                        gameEngineModel.village.getMapSize());
                 try {
                     gameEngineModel.village.upgradeBuilding(coords[0], coords[1]);
                 } catch (NoBuilderAvaliable noBuilderAvaliable) {
