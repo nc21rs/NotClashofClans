@@ -58,34 +58,26 @@ public class GameEngineControl {
     }
 
     public String processRequest(String request) {
-
-        if (request == null) {
-            return "Request cannot be null";
+        String response = "";
+        if (request == null)
+            response = "Request cannot be null";
+        if (gameEngineModel.userInterface.isRequest(request)){
+            response = gameEngineModel.userInterface.processRequest(request);
         }
-
-        String[] requestComponents = request.trim().toUpperCase().split(" ");
-        String action = requestComponents[0];
-
-        switch (action) {
-            // TODO: IMPLEMENT THE COMMAND PARSER HERE, I FELL LIKE WE CAN MODIFY ACTION
-            // METHOD INSTEAD
-            // WILL DO IT LATER
-        }
-
-        return null;
+        return response;
     }
 
-    public void action(ActionType actionType) {
+    public String action(ActionType actionType) {
+        String output = "";
         switch (actionType) {
             case QUIT:
                 gameEngineModel.run = false;
-                gameEngineModel.userInterface.print("Quitting Game");
+                output = "quit";
                 break;
 
             case UPGRADE_BUILD:
                 // get x and y coords
-                int[] coords = gameEngineModel.userInterface.getCoords(gameEngineModel.village.getMapSize(),
-                        gameEngineModel.village.getMapSize());
+                int[] coords = gameEngineModel.userInterface.getCoords(gameEngineModel.village.getMapSize(), gameEngineModel.village.getMapSize());
                 try {
                     gameEngineModel.village.upgradeBuilding(coords[0], coords[1]);
                 } catch (NoBuilderAvaliable noBuilderAvaliable) {

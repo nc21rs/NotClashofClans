@@ -1,6 +1,7 @@
 package game_user_interface;
 
 import game_elements.ResourceType;
+import game_elements.Village;
 import game_elements.VillageControl;
 import game_engine.ActionType;
 //import game_engine.GameEngine;
@@ -311,6 +312,17 @@ public class UserInterface {
 //
 //    }
 
+
+    public String showCommands(){
+        return "Commands:" +
+                "/LIST" +
+                "/BUILD <structure> <x,y>" +
+                "/TRAIN <entity>" +
+                "/UPGRADE_BUILD <x,y>" +
+                "/UPGRADE_UNIT <unit_name>" +
+                "/EXPLORE" +
+                "/QUIT";
+    }
     /**
      * check if the provided user input is a request to the server
      *
@@ -360,16 +372,48 @@ public class UserInterface {
     }
 
 
-//    else {
-//        switch (action) {
-//            case "LIST":
-//            case "BUILD":
-//            case "TRAIN":
-//            case "UPGRADE":
-//            case "EXPLORE":
-//            case "QUIT":
-//        }
-//    }
+    public String outputMap(VillageControl village) {
+        String output = "";
+        output += "Map size is " + width + "x" + height+"\n";
+        output += "===== Map =====\n";
+        for (int row = 0; row < width; row++) {
+            for (int col = 0; col < height; col++) {
+                if (village.getBuilding(row,col) != null)
+                    output += village.getBuilding(row, col).getShortName() + " ";
+                else
+                    output += " ";
+            }
+            output += "\n";
+        }
+        output += "===============\n";
+        return output;
+    }
+
+    public String outputResources(VillageControl village) {
+        if (village == null){
+            return "No village selected\n";
+        }
+
+        String output = "";
+        output = output.concat(String.format("%d Food\n",village.getResources().getResource(ResourceType.FOOD)));
+        output = output.concat(String.format("%d Wood\n", village.getResources().getResource(ResourceType.WOOD)));
+        output = output.concat(String.format("%d Iron\n", village.getResources().getResource(ResourceType.IRON)));
+        output = output.concat(String.format("%d Gold\n", village.getResources().getResource(ResourceType.GOLD)));
+        output = output.concat("=====================\n");
+        return output;
+    }
+
+    public boolean validateCoords(int x, int y, VillageControl village) {
+        if(x < 0 || x>= width)
+            return false;
+        if(y < 0 || y >= height)
+            return false;
+        if(village.getBuilding(x, y) != null)
+            return false;
+        return true;
+    }
+
+
 
 
 }
